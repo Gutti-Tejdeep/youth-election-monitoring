@@ -14,14 +14,14 @@ function Layout() {
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Navbar toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isSidebarOpen} />
+      <Sidebar isOpen={isSidebarOpen} handleDrawerToggle={toggleSidebar} />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           marginTop: '64px',
-          marginLeft: isSidebarOpen ? '240px' : '0',
+          marginLeft: { xs: 0, sm: isSidebarOpen ? '240px' : 0 },
           height: 'calc(100vh - 64px)',
           overflowY: 'auto',
           transition: (theme) =>

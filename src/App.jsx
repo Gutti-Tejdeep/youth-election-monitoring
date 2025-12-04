@@ -9,6 +9,7 @@ import Reports from './pages/Reports';
 import Volunteers from './pages/Volunteers';
 import Incidents from './pages/Incidents';
 import LoginPage from './pages/LoginPage';
+import Interaction from './pages/Interaction';
 
 // Component Imports
 import Layout from './components/Layout';
@@ -48,6 +49,7 @@ function AppContent() {
           {/* Nested Routes inside the Layout */}
           <Route path="home" element={<Home />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="interaction" element={<Interaction />} />
           <Route path="volunteers" element={<Volunteers />} />
           <Route path="incidents" element={<Incidents />} />
 

@@ -19,6 +19,11 @@ export const DataProvider = ({ children }) => {
         return saved ? JSON.parse(saved) : [];
     });
 
+    const [interactions, setInteractions] = useState(() => {
+        const saved = localStorage.getItem('interactions');
+        return saved ? JSON.parse(saved) : [];
+    });
+
     // Save to localStorage whenever data changes
     useEffect(() => {
         localStorage.setItem('volunteers', JSON.stringify(volunteers));
@@ -31,6 +36,10 @@ export const DataProvider = ({ children }) => {
     useEffect(() => {
         localStorage.setItem('reports', JSON.stringify(reports));
     }, [reports]);
+
+    useEffect(() => {
+        localStorage.setItem('interactions', JSON.stringify(interactions));
+    }, [interactions]);
 
     // Helper functions
     const addVolunteer = (volunteer) => {
@@ -45,6 +54,10 @@ export const DataProvider = ({ children }) => {
         setReports(prev => [report, ...prev]);
     };
 
+    const addInteraction = (interaction) => {
+        setInteractions(prev => [interaction, ...prev]);
+    };
+
     const value = {
         volunteers,
         setVolunteers,
@@ -54,7 +67,10 @@ export const DataProvider = ({ children }) => {
         addIncident,
         reports,
         setReports,
-        addReport
+        addReport,
+        interactions,
+        setInteractions,
+        addInteraction
     };
 
     return (

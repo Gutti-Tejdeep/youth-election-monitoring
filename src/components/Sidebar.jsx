@@ -1,10 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Box, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import HomeIcon from '@mui/icons-material/Home';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
+import ForumIcon from '@mui/icons-material/Forum';
 
 // Define the width of the drawer
 const drawerWidth = 240;
@@ -13,18 +16,28 @@ const drawerWidth = 240;
 const navItems = [
   { text: 'Home', icon: HomeIcon, path: '/' },
   { text: 'Reports', icon: AssignmentIcon, path: '/reports' },
+  { text: 'Interaction', icon: ForumIcon, path: '/interaction' },
   { text: 'Volunteers', icon: GroupIcon, path: '/volunteers' },
   { text: 'Incidents', icon: WarningIcon, path: '/incidents' },
 ];
 
 function Sidebar({ isOpen, handleDrawerToggle }) {
-  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const handleItemClick = () => {
+    // Only close the sidebar on mobile when an item is clicked
+    if (isMobile) {
+      handleDrawerToggle();
+    }
+  };
+
   const drawerContent = (
     <div>
       <Toolbar>
         {/* App Title inside the Sidebar Header */}
         <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
-            YEM Monitor
+          YEM Monitor
         </Typography>
       </Toolbar>
       <List>
@@ -34,7 +47,7 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
             <ListItemButton
               component={NavLink}
               to={item.path}
-              onClick={handleDrawerToggle}
+              onClick={handleItemClick}
               sx={{
                 '&.active': {
                   backgroundColor: 'rgba(25, 118, 210, 0.12)', // Light blue for active link
@@ -66,10 +79,11 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          // Show permanent drawer only on sm+ when `isOpen` is true
+          display: { xs: 'none', sm: isOpen ? 'block' : 'none' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
         }}
-        open
+        open={isOpen}
       >
         {drawerContent}
       </Drawer>
