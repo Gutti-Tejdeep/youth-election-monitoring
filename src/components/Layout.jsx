@@ -22,7 +22,7 @@ function Layout() {
           p: 3,
           marginTop: '64px',
           marginLeft: { xs: 0, sm: isSidebarOpen ? '240px' : 0 },
-          height: 'calc(100vh - 64px)',
+          height: 'calc(100vh - 80px)',
           overflowY: 'auto',
           transition: (theme) =>
             theme.transitions.create('margin', {

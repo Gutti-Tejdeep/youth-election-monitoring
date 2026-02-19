@@ -108,39 +108,91 @@ function Incidents() {
     }
   };
 
-  const getSeverityColor = (severity) => {
+  const getSeverityGradient = (severity) => {
     switch (severity) {
-      case 'High': return 'error';
-      case 'Medium': return 'warning';
-      case 'Low': return 'info';
-      default: return 'default';
+      case 'High': return 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)';
+      case 'Medium': return 'linear-gradient(135deg, #ffa726 0%, #fb8c00 100%)';
+      case 'Low': return 'linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%)';
+      default: return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
     }
   };
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4">
-          Incident Tracker
-        </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box className="slide-in-right">
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 2px 20px rgba(0,0,0,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2
+            }}
+          >
+            <span style={{ fontSize: '2.5rem' }}>⚠️</span>
+            Incident Tracker
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: 'rgba(255,255,255,0.85)',
+              mt: 1,
+              ml: 7,
+              fontWeight: 500,
+              textShadow: '0 2px 10px rgba(0,0,0,0.2)'
+            }}
+          >
+            Monitor and manage election incidents in real-time
+          </Typography>
+        </Box>
         <Button
           variant="contained"
-          color="error"
+          className="scale-in stagger-1"
           startIcon={<AddIcon />}
           onClick={handleOpenDialog}
+          sx={{
+            background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
+            color: '#fff',
+            px: 4,
+            py: 1.5,
+            borderRadius: '16px',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            textTransform: 'none',
+            boxShadow: '0 8px 24px rgba(255, 107, 107, 0.4)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%)',
+              transform: 'translateY(-4px)',
+              boxShadow: '0 12px 32px rgba(255, 107, 107, 0.5)',
+            }
+          }}
         >
           Report Incident
         </Button>
       </Box>
 
-      <Paper elevation={3} sx={{ p: 3 }}>
+      <Paper
+        className="premium-card slide-in-up stagger-2"
+        sx={{
+          p: 4,
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+        }}
+      >
         {incidents.length === 0 ? (
-          <Box sx={{ textAlign: 'center', py: 8 }}>
-            <WarningIcon sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-            <Typography variant="h6" gutterBottom color="textSecondary">
+          <Box sx={{ textAlign: 'center', py: 10 }}>
+            <WarningIcon sx={{ fontSize: 100, color: 'var(--neutral-300)', mb: 3, opacity: 0.5 }} />
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: 'var(--text-primary)' }}>
               No incidents reported
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body1" color="textSecondary" sx={{ mt: 1 }}>
               Click "Report Incident" to file a new incident report
             </Typography>
           </Box>
@@ -149,22 +201,38 @@ function Incidents() {
             <TableContainer>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Incident ID</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Type</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Location</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Description</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Reporter</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Severity</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Reported On</TableCell>
+                  <TableRow sx={{
+                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                  }}>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Incident ID</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Type</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Location</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Description</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Reporter</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Severity</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Reported On</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {incidents.map((incident) => (
-                    <TableRow key={incident.id} hover>
-                      <TableCell>{incident.id}</TableCell>
-                      <TableCell>{incident.type}</TableCell>
+                  {incidents.map((incident, index) => (
+                    <TableRow
+                      key={incident.id}
+                      className={`scale-in stagger-${Math.min(index + 1, 5)}`}
+                      sx={{
+                        transition: 'all 0.3s ease',
+                        '&:nth-of-type(odd)': {
+                          background: 'rgba(102, 126, 234, 0.03)',
+                        },
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%)',
+                          transform: 'scale(1.01)',
+                          boxShadow: '0 4px 16px rgba(102, 126, 234, 0.15)',
+                        }
+                      }}
+                    >
+                      <TableCell sx={{ fontWeight: 600, color: 'var(--primary-600)' }}>{incident.id}</TableCell>
+                      <TableCell sx={{ fontWeight: 500 }}>{incident.type}</TableCell>
                       <TableCell>{incident.location}</TableCell>
                       <TableCell sx={{ maxWidth: 200 }}>
                         {incident.description.length > 50
@@ -172,7 +240,9 @@ function Incidents() {
                           : incident.description}
                       </TableCell>
                       <TableCell>
-                        {incident.reporterName}
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {incident.reporterName}
+                        </Typography>
                         {incident.reporterContact && (
                           <Typography variant="caption" display="block" color="textSecondary">
                             {incident.reporterContact}
@@ -182,8 +252,16 @@ function Incidents() {
                       <TableCell>
                         <Chip
                           label={incident.severity}
-                          color={getSeverityColor(incident.severity)}
                           size="small"
+                          className="pulse"
+                          sx={{
+                            background: getSeverityGradient(incident.severity),
+                            color: '#fff',
+                            fontWeight: 'bold',
+                            px: 1.5,
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                          }}
                         />
                       </TableCell>
                       <TableCell>
@@ -191,16 +269,33 @@ function Incidents() {
                           label={incident.status}
                           color={getStatusColor(incident.status)}
                           size="small"
+                          sx={{
+                            fontWeight: 600,
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                          }}
                         />
                       </TableCell>
-                      <TableCell>{incident.reportedOn}</TableCell>
+                      <TableCell sx={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                        {incident.reportedOn}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
-              <Typography variant="caption" color="textSecondary">
+            <Box sx={{ mt: 3, textAlign: 'center' }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'var(--text-secondary)',
+                  fontWeight: 600,
+                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                  display: 'inline-block',
+                  px: 3,
+                  py: 1,
+                  borderRadius: '20px',
+                }}
+              >
                 Total incidents: {incidents.length}
               </Typography>
             </Box>
@@ -213,10 +308,34 @@ function Incidents() {
         onClose={handleCloseDialog}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: '24px',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)',
+            backdropFilter: 'blur(20px)',
+            boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
+          }
+        }}
+        BackdropProps={{
+          sx: {
+            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }
+        }}
       >
-        <DialogTitle>Report New Incident</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
+        <DialogTitle sx={{
+          fontSize: '1.75rem',
+          fontWeight: 'bold',
+          background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          pb: 1
+        }}>
+          Report New Incident
+        </DialogTitle>
+        <DialogContent sx={{ pt: 3 }}>
+          <Grid container spacing={3} sx={{ mt: 0.5 }}>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -226,6 +345,18 @@ function Incidents() {
                 value={formData.type}
                 onChange={handleInputChange}
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    '&:hover fieldset': {
+                      borderColor: 'var(--primary-500)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--primary-600)',
+                      borderWidth: '2px',
+                    }
+                  }
+                }}
               >
                 {incidentTypes.map((type) => (
                   <MenuItem key={type} value={type}>
@@ -243,6 +374,18 @@ function Incidents() {
                 onChange={handleInputChange}
                 placeholder="e.g., Polling Station A-12, District 5"
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    '&:hover fieldset': {
+                      borderColor: 'var(--primary-500)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--primary-600)',
+                      borderWidth: '2px',
+                    }
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -256,6 +399,18 @@ function Incidents() {
                 rows={4}
                 placeholder="Provide detailed description of the incident..."
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    '&:hover fieldset': {
+                      borderColor: 'var(--primary-500)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--primary-600)',
+                      borderWidth: '2px',
+                    }
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -266,6 +421,18 @@ function Incidents() {
                 value={formData.reporterName}
                 onChange={handleInputChange}
                 required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    '&:hover fieldset': {
+                      borderColor: 'var(--primary-500)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--primary-600)',
+                      borderWidth: '2px',
+                    }
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -275,13 +442,56 @@ function Incidents() {
                 name="reporterContact"
                 value={formData.reporterContact}
                 onChange={handleInputChange}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    '&:hover fieldset': {
+                      borderColor: 'var(--primary-500)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--primary-600)',
+                      borderWidth: '2px',
+                    }
+                  }
+                }}
               />
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained" color="error">
+        <DialogActions sx={{ p: 3, pt: 2 }}>
+          <Button
+            onClick={handleCloseDialog}
+            sx={{
+              borderRadius: '12px',
+              px: 3,
+              py: 1,
+              fontWeight: 600,
+              textTransform: 'none',
+              color: 'var(--text-secondary)',
+              '&:hover': {
+                background: 'rgba(0,0,0,0.05)',
+              }
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
+              borderRadius: '12px',
+              px: 4,
+              py: 1,
+              fontWeight: 'bold',
+              textTransform: 'none',
+              boxShadow: '0 4px 16px rgba(255, 107, 107, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%)',
+                boxShadow: '0 6px 20px rgba(255, 107, 107, 0.4)',
+              }
+            }}
+          >
             Submit Report
           </Button>
         </DialogActions>

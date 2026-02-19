@@ -5,6 +5,7 @@ import { DataProvider } from './context/DataContext';
 
 // Page Imports
 import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
 import Reports from './pages/Reports';
 import Volunteers from './pages/Volunteers';
 import Incidents from './pages/Incidents';
@@ -48,6 +49,7 @@ function AppContent() {
         >
           {/* Nested Routes inside the Layout */}
           <Route path="home" element={<Home />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="reports" element={<Reports />} />
           <Route path="interaction" element={<Interaction />} />
           <Route path="volunteers" element={<Volunteers />} />

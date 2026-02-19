@@ -4,17 +4,19 @@ import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Too
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import HomeIcon from '@mui/icons-material/Home';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
 import ForumIcon from '@mui/icons-material/Forum';
 
 // Define the width of the drawer
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 // Array of navigation items
 const navItems = [
-  { text: 'Home', icon: HomeIcon, path: '/' },
+  { text: 'Home', icon: HomeIcon, path: '/home' },
+  { text: 'Dashboard', icon: DashboardIcon, path: '/dashboard' },
   { text: 'Reports', icon: AssignmentIcon, path: '/reports' },
   { text: 'Interaction', icon: ForumIcon, path: '/interaction' },
   { text: 'Volunteers', icon: GroupIcon, path: '/volunteers' },
@@ -36,32 +38,40 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
     <div>
       <Toolbar>
         {/* App Title inside the Sidebar Header */}
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold' }}>
-          YEM Monitor
+        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold', color: '#fff', letterSpacing: 1 }}>
+          📊 YEM Monitor
         </Typography>
       </Toolbar>
-      <List>
+      <List sx={{ px: 1 }}>
         {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
+          <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
             {/* NavLink is used to handle routing and active state */}
             <ListItemButton
               component={NavLink}
               to={item.path}
               onClick={handleItemClick}
               sx={{
+                borderRadius: '12px',
+                color: 'rgba(255, 255, 255, 0.8)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  transform: 'translateX(5px)',
+                },
                 '&.active': {
-                  backgroundColor: 'rgba(25, 118, 210, 0.12)', // Light blue for active link
-                  color: 'primary.main',
+                  background: 'rgba(255, 255, 255, 0.25)',
+                  color: '#fff',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   '& .MuiListItemIcon-root': {
-                    color: 'primary.main',
+                    color: '#fff',
                   },
                 },
               }}
             >
-              <ListItemIcon>
+              <ListItemIcon sx={{ color: 'rgba(255, 255, 255, 0.8)', minWidth: 40 }}>
                 <item.icon />
               </ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: 500 }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -81,7 +91,17 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
         sx={{
           // Show permanent drawer only on sm+ when `isOpen` is true
           display: { xs: 'none', sm: isOpen ? 'block' : 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            background: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(20px)',
+            borderRight: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRadius: '0 20px 20px 0',
+            margin: '16px 0 16px 16px',
+            height: 'calc(100vh - 32px)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          },
         }}
         open={isOpen}
       >
@@ -98,7 +118,13 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
         }}
         sx={{
           display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            background: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(20px)',
+            borderRight: '1px solid rgba(255, 255, 255, 0.2)',
+          },
         }}
       >
         {drawerContent}

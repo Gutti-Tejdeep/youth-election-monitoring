@@ -1,218 +1,122 @@
 import React from 'react';
-import { Box, Typography, Paper, Grid, Card, CardContent, List, ListItem, ListItemText, Chip } from '@mui/material';
+import { Box, Typography, Button, Container, Grid, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import SecurityIcon from '@mui/icons-material/Security';
 import GroupIcon from '@mui/icons-material/Group';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import WarningIcon from '@mui/icons-material/Warning';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { useData } from '../context/DataContext';
-
-// A simple reusable card component for key metrics
-const MetricCard = ({ title, value, icon: IconComponent, color }) => (
-  <Card sx={{
-    minHeight: 120,
-    display: 'flex',
-    alignItems: 'center',
-    boxShadow: 3
-  }}>
-    <CardContent sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Box>
-        <Typography color="textSecondary" gutterBottom>
-          {title}
-        </Typography>
-        <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
-          {value}
-        </Typography>
-      </Box>
-      <IconComponent sx={{ fontSize: 48, color: color, opacity: 0.6 }} />
-    </CardContent>
-  </Card>
-);
-
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 function Home() {
-  const { volunteers, incidents, reports } = useData();
-
-  // Calculate metrics
-  const activeVolunteers = volunteers.filter(v => v.status === 'Active').length;
-  const openIncidents = incidents.filter(i => i.status === 'Open').length;
-  const totalReports = reports.length;
-
-  // Get recent activity (last 5 items)
-  const recentActivity = [
-    ...incidents.slice(0, 3).map(inc => ({
-      type: 'incident',
-      text: `Incident reported: ${inc.type}`,
-      time: inc.reportedOn,
-      severity: inc.severity
-    })),
-    ...volunteers.slice(0, 2).map(vol => ({
-      type: 'volunteer',
-      text: `New volunteer: ${vol.name}`,
-      time: vol.joinedOn,
-      severity: null
-    })),
-    ...reports.slice(0, 2).map(rep => ({
-      type: 'report',
-      text: `Report generated: ${rep.type}`,
-      time: rep.generatedOn,
-      severity: null
-    }))
-  ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
+  const navigate = useNavigate();
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
-        Election Monitoring Dashboard
-      </Typography>
+    <Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Hero Section */}
+      <Box sx={{
+        minHeight: '85vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        py: 0,
+        background: 'radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.05) 0%, transparent 60%)'
+      }}>
+        <Container maxWidth="md">
+          <Box className="scale-in" sx={{ mb: 4, display: 'inline-flex', p: 2, borderRadius: '50%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)' }}>
+            <HowToVoteIcon sx={{ fontSize: 64, color: '#fff' }} />
+          </Box>
 
-      {/* Grid for Key Metric Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Active Volunteers"
-            value={activeVolunteers}
-            icon={GroupIcon}
-            color="primary.main"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Total Reports Filed"
-            value={totalReports}
-            icon={AssignmentIcon}
-            color="secondary.main"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Open Incidents"
-            value={openIncidents}
-            icon={WarningIcon}
-            color="#ff9800"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Total Incidents"
-            value={incidents.length}
-            icon={EventAvailableIcon}
-            color="#4caf50"
-          />
-        </Grid>
-      </Grid>
+          <Typography variant="h2" gutterBottom className="slide-in-up" sx={{
+            fontWeight: 800,
+            mb: 2,
+            display: 'inline-block', // Ensures gradient applies to text bounds, not full width
+            background: 'linear-gradient(135deg, #2d3748 0%, #4a5568 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}>
+            Youth Election Monitoring System
+          </Typography>
 
-      {/* Data Visualization / Recent Activity */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, height: 400 }}>
-            <Typography variant="h6" gutterBottom>
-              Incidents Overview
-            </Typography>
-            {incidents.length === 0 ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 300 }}>
-                <Typography variant="body1" color="textSecondary">
-                  No incidents reported yet
-                </Typography>
-              </Box>
-            ) : (
-              <Box sx={{ mt: 2 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={4}>
-                    <Paper sx={{ p: 2, textAlign: 'center', bgcolor: '#ffebee' }}>
-                      <Typography variant="h4" color="error">
-                        {incidents.filter(i => i.severity === 'High').length}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        High Severity
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Paper sx={{ p: 2, textAlign: 'center', bgcolor: '#fff3e0' }}>
-                      <Typography variant="h4" color="warning.main">
-                        {incidents.filter(i => i.severity === 'Medium').length}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Medium Severity
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Paper sx={{ p: 2, textAlign: 'center', bgcolor: '#e3f2fd' }}>
-                      <Typography variant="h4" color="info.main">
-                        {incidents.filter(i => i.severity === 'Low').length}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Low Severity
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                </Grid>
-                <Box sx={{ mt: 3 }}>
-                  <Typography variant="subtitle2" gutterBottom>
-                    Recent Incidents
-                  </Typography>
-                  <List dense>
-                    {incidents.slice(0, 3).map((incident) => (
-                      <ListItem key={incident.id}>
-                        <ListItemText
-                          primary={`${incident.type} - ${incident.location}`}
-                          secondary={incident.reportedOn}
-                        />
-                        <Chip
-                          label={incident.severity}
-                          size="small"
-                          color={
-                            incident.severity === 'High' ? 'error' :
-                              incident.severity === 'Medium' ? 'warning' : 'info'
-                          }
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
+          <Typography variant="h5" color="textSecondary" className="slide-in-up stagger-1" sx={{ mb: 6, maxWidth: '800px', mx: 'auto', lineHeight: 1.6 }}>
+            Empowering transparent elections through real-time monitoring, incident tracking, and volunteer coordination. Join us in ensuring fair and secure democratic processes.
+          </Typography>
+
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => navigate('/dashboard')}
+            startIcon={<DashboardIcon />}
+            className="slide-in-up stagger-2 hover-lift"
+            sx={{
+              px: 6,
+              py: 2,
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+              borderRadius: '50px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              boxShadow: '0 10px 25px rgba(102, 126, 234, 0.4)',
+              textTransform: 'none',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                boxShadow: '0 15px 35px rgba(102, 126, 234, 0.5)',
+              }
+            }}
+          >
+            Go to Dashboard
+          </Button>
+        </Container>
+      </Box>
+
+      {/* Features Grid */}
+      <Container maxWidth="lg" sx={{ mb: 8 }}>
+        <Grid container spacing={4}>
+          {[
+            {
+              icon: <SecurityIcon sx={{ fontSize: 40, color: '#4facfe' }} />,
+              title: "Secure Monitoring",
+              desc: "Real-time incident tracking with severity levels and secure reporting mechanisms."
+            },
+            {
+              icon: <GroupIcon sx={{ fontSize: 40, color: '#43e97b' }} />,
+              title: "Volunteer Network",
+              desc: "Coordinate volunteers effectively across different polling stations and districts."
+            },
+            {
+              icon: <AssessmentIcon sx={{ fontSize: 40, color: '#fa709a' }} />,
+              title: "Data Analytics",
+              desc: "Generate comprehensive reports and visualize election data trends instantly."
+            }
+          ].map((feature, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Paper
+                className={`premium-card slide-in-up stagger-${index + 3}`}
+                sx={{
+                  p: 4,
+                  height: '100%',
+                  textAlign: 'center',
+                  background: 'rgba(255,255,255,0.8)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center'
+                }}
+              >
+                <Box sx={{ mb: 2, p: 2, borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }}>
+                  {feature.icon}
                 </Box>
-              </Box>
-            )}
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3, height: 400, overflowY: 'auto' }}>
-            <Typography variant="h6" gutterBottom>
-              Recent Activity
-            </Typography>
-            {recentActivity.length === 0 ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 300 }}>
-                <Typography variant="body1" color="textSecondary">
-                  No recent activity
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  {feature.title}
                 </Typography>
-              </Box>
-            ) : (
-              <List dense>
-                {recentActivity.map((activity, index) => (
-                  <ListItem key={index} sx={{ borderBottom: '1px solid #f0f0f0' }}>
-                    <ListItemText
-                      primary={activity.text}
-                      secondary={activity.time}
-                      primaryTypographyProps={{ variant: 'body2' }}
-                      secondaryTypographyProps={{ variant: 'caption' }}
-                    />
-                    {activity.severity && (
-                      <Chip
-                        label={activity.severity}
-                        size="small"
-                        color={
-                          activity.severity === 'High' ? 'error' :
-                            activity.severity === 'Medium' ? 'warning' : 'info'
-                        }
-                      />
-                    )}
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </Paper>
+                <Typography variant="body1" color="textSecondary">
+                  {feature.desc}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
         </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
 }
