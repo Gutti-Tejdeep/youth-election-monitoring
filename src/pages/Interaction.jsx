@@ -45,18 +45,18 @@ function Interaction() {
         <Typography
           variant="h3"
           sx={{
-            fontWeight: 'bold',
-            background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%)',
+            fontWeight: 800,
+            background: 'var(--gradient-primary)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            textShadow: '0 2px 20px rgba(0,0,0,0.2)',
+            textShadow: '0 4px 15px rgba(0,0,0,0.1)',
             display: 'flex',
             alignItems: 'center',
-            gap: 2
+            gap: 2,
+            fontFamily: "'Outfit', sans-serif"
           }}
         >
-          <span style={{ fontSize: '2.5rem' }}>💬</span>
           Community Interaction
         </Typography>
         <Typography
@@ -141,15 +141,15 @@ function Interaction() {
               fullWidth
               startIcon={<SendIcon />}
               sx={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'var(--gradient-primary)',
                 borderRadius: '12px',
                 py: 1.5,
                 fontWeight: 'bold',
                 textTransform: 'none',
-                boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)',
+                boxShadow: 'var(--shadow-md)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                  boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
+                  background: 'var(--gradient-ocean)',
+                  boxShadow: 'var(--shadow-lg)',
                 },
                 '&:disabled': {
                   background: 'rgba(0,0,0,0.12)',
@@ -177,7 +177,7 @@ function Interaction() {
                 variant="h5"
                 sx={{
                   fontWeight: 'bold',
-                  background: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+                  background: 'var(--gradient-primary)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text'

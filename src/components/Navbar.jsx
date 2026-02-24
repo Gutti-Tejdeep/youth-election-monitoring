@@ -9,10 +9,11 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Logo from './Logo';
 
 function Navbar({ toggleSidebar }) {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   // Election date state — default to today
   const today = new Date().toISOString().split('T')[0];
@@ -102,23 +103,22 @@ function Navbar({ toggleSidebar }) {
 
         {/* App Title */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexGrow: 1 }}>
-          <Box
-            className="pulse"
-            sx={{ fontSize: '2rem', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))' }}
-          >
-            🗳️
+          <Box className="hover-scale" sx={{ cursor: 'pointer' }} onClick={() => navigate('/home')}>
+            <Logo size={48} color1="#ffffff" color2="rgba(255,255,255,0.7)" />
           </Box>
           <Typography
             variant="h5"
             noWrap
             component="div"
             sx={{
-              fontWeight: 'bold',
+              fontWeight: 800,
               letterSpacing: '1px',
-              background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.85) 100%)',
+              fontFamily: "'Outfit', sans-serif",
+              background: 'linear-gradient(135deg, #fff 0%, #e2e8f0 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
+              textShadow: '0 2px 10px rgba(0,0,0,0.1)'
             }}
           >
             YEM Dashboard
@@ -202,6 +202,24 @@ function Navbar({ toggleSidebar }) {
             </Tooltip>
           )}
         </Box>
+
+        {/* User Role Display */}
+        {user && (
+          <Box sx={{ display: { xs: 'none', sm: 'block' }, ml: 2 }}>
+            <Chip
+              label={user.role}
+              size="small"
+              sx={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: '#fff',
+                fontWeight: 600,
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(10px)',
+                px: 1
+              }}
+            />
+          </Box>
+        )}
 
         {/* Logout */}
         <Button

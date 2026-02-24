@@ -5,13 +5,23 @@ import { useAuth } from '../context/AuthContext';
 // MUI Imports
 import { Box, Button, Container, TextField, Typography, Alert, Paper } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import Logo from '../components/Logo';
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState(true); // Toggle state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState(''); // New state for registration
+  const [role, setRole] = useState('Citizen'); // Default role
   const [error, setError] = useState('');
+
+  // Roles available
+  const roles = [
+    { id: 'Admin', label: 'Admin' },
+    { id: 'Citizen', label: 'Citizen' },
+    { id: 'Election Observer', label: 'Election Observer' },
+    { id: 'Data Analyst', label: 'Data Analyst' }
+  ];
 
   // Captcha State
   const [captchaValue, setCaptchaValue] = useState('');
@@ -68,9 +78,9 @@ function LoginPage() {
     setTimeout(() => {
       try {
         if (isLogin) {
-          login(email, password);
+          login(email, password, role);
         } else {
-          register(username, email, password);
+          register(username, email, password, role);
         }
         navigate('/home');
       } catch (err) {
@@ -113,26 +123,61 @@ function LoginPage() {
         >
           <Box
             sx={{
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               mb: 2,
-              boxShadow: '0 8px 20px rgba(102, 126, 234, 0.4)',
+              filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))',
+              animation: 'float 6s ease-in-out infinite'
             }}
           >
-            <Typography variant="h3" sx={{ color: '#fff' }}>
-              🗳️
-            </Typography>
+            <Logo size={100} color1="#fff" color2="#94a3b8" />
           </Box>
-          <Typography component="h1" variant="h4" sx={{ fontWeight: 'bold', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
+          <Typography component="h1" variant="h3" sx={{
+            fontWeight: 900,
+            color: '#fff',
+            textShadow: '0 4px 15px rgba(0,0,0,0.3)',
+            letterSpacing: '2px',
+            fontFamily: "'Outfit', sans-serif"
+          }}>
             YEM
           </Typography>
+
+          <Box sx={{ mt: 3, width: '100%' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mb: 1, fontWeight: 600 }}>
+              Select Login Type:
+            </Typography>
+            <Box sx={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 1,
+              mb: 2
+            }}>
+              {roles.map((r) => (
+                <Button
+                  key={r.id}
+                  onClick={() => setRole(r.id)}
+                  variant={role === r.id ? 'contained' : 'outlined'}
+                  size="small"
+                  sx={{
+                    fontSize: '0.7rem',
+                    py: 1,
+                    textTransform: 'none',
+                    borderColor: 'rgba(255,255,255,0.3)',
+                    color: role === r.id ? '#fff' : 'rgba(255,255,255,0.7)',
+                    background: role === r.id ? 'rgba(255,255,255,0.2)' : 'transparent',
+                    backdropFilter: role === r.id ? 'blur(10px)' : 'none',
+                    '&:hover': {
+                      borderColor: '#fff',
+                      background: 'rgba(255,255,255,0.1)',
+                    }
+                  }}
+                >
+                  {r.label}
+                </Button>
+              ))}
+            </Box>
+          </Box>
+
           <Typography component="h2" variant="subtitle1" sx={{ mt: 1, color: 'rgba(255,255,255,0.9)', fontWeight: 500 }}>
-            {isLogin ? 'Admin Login' : 'Create Account'}
+            {isLogin ? `${role} Login` : `Register as ${role}`}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3, width: '100%' }}>
             {!isLogin && (
@@ -211,7 +256,7 @@ function LoginPage() {
                     mr: 1,
                     flexGrow: 1,
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'var(--gradient-primary)',
                     color: '#fff',
                     letterSpacing: '8px',
                     fontWeight: 'bold',
@@ -220,7 +265,7 @@ function LoginPage() {
                     userSelect: 'none',
                     borderRadius: 2,
                     border: 'none',
-                    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                    boxShadow: 'var(--shadow-md)',
                   }}
                 >
                   {captchaValue}
@@ -278,13 +323,13 @@ function LoginPage() {
                 mb: 2,
                 py: 1.5,
                 borderRadius: 2,
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'var(--gradient-primary)',
                 fontSize: '1.1rem',
                 fontWeight: 'bold',
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                boxShadow: 'var(--shadow-lg)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                  boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)',
+                  background: 'var(--gradient-ocean)',
+                  boxShadow: 'var(--shadow-xl)',
                 }
               }}
             >

@@ -35,37 +35,49 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('userCredentials', JSON.stringify(credentials));
     }, [credentials]);
 
-    const login = (email, password) => {
+    const login = (email, password, role) => {
         // Validate credentials exist and match
         const credential = credentials.find(cred => cred.email === email && cred.password === password);
-        
+
         if (!credential) {
             throw new Error('Invalid email or password. Please register first.');
         }
+
+        // If a role is specified, verify it matches (optional, usually users have fixed roles)
+        // For this mock app, we'll allow selection during login if not fixed
+        const assignedRole = role || credential.role || 'Citizen';
 
         // Create new user
         const newUser = {
             uid: 'mock-user-id-' + Math.random().toString(36).substring(7),
             email: email,
-            displayName: credential.username || email
+            displayName: credential.username || email,
+            role: assignedRole
         };
         setUser(newUser);
         return newUser;
     };
 
-    const register = (username, email, password) => {
+    const register = (username, email, password, role = 'Citizen') => {
         // Create new user
         const newUser = {
             uid: 'mock-user-id-' + Math.random().toString(36).substring(7),
             email: email,
-            displayName: username
+            displayName: username,
+            role: role
         };
         setUser(newUser);
 
         // Save new user credentials
         const credentialExists = credentials.some(cred => cred.email === email);
         if (!credentialExists) {
-            setCredentials(prev => [...prev, { email, password, username, createdAt: new Date().toISOString() }]);
+            setCredentials(prev => [...prev, {
+                email,
+                password,
+                username,
+                role,
+                createdAt: new Date().toISOString()
+            }]);
         }
     };
 

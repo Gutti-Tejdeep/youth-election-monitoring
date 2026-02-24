@@ -9,6 +9,8 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
 import ForumIcon from '@mui/icons-material/Forum';
+import Logo from './Logo';
+import { useAuth } from '../context/AuthContext';
 
 // Define the width of the drawer
 const drawerWidth = 250;
@@ -26,6 +28,7 @@ const navItems = [
 function Sidebar({ isOpen, handleDrawerToggle }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user } = useAuth();
 
   const handleItemClick = () => {
     // Only close the sidebar on mobile when an item is clicked
@@ -34,16 +37,43 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
     }
   };
 
+  // Filter nav items based on role
+  const filteredNavItems = navItems.filter(item => {
+    if (!user) return false;
+    const role = user.role;
+
+    if (role === 'Admin') return true;
+
+    if (role === 'Citizen') {
+      return ['Home', 'Interaction', 'Incidents'].includes(item.text);
+    }
+
+    if (role === 'Election Observer') {
+      return ['Home', 'Dashboard', 'Reports', 'Incidents', 'Interaction'].includes(item.text);
+    }
+
+    if (role === 'Data Analyst') {
+      return ['Home', 'Dashboard', 'Reports'].includes(item.text);
+    }
+
+    return ['Home'].includes(item.text); // Default
+  });
+
   const drawerContent = (
     <div>
-      <Toolbar>
-        {/* App Title inside the Sidebar Header */}
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 'bold', color: '#fff', letterSpacing: 1 }}>
-          📊 YEM Monitor
+      <Toolbar sx={{ gap: 1.5, py: 2 }}>
+        <Logo size={32} color1="#ffffff" color2="rgba(255,255,255,0.7)" />
+        <Typography variant="h6" noWrap component="div" sx={{
+          fontWeight: 800,
+          color: '#fff',
+          letterSpacing: 0.5,
+          fontFamily: "'Outfit', sans-serif"
+        }}>
+          YEM Monitor
         </Typography>
       </Toolbar>
       <List sx={{ px: 1 }}>
-        {navItems.map((item) => (
+        {filteredNavItems.map((item) => (
           <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
             {/* NavLink is used to handle routing and active state */}
             <ListItemButton

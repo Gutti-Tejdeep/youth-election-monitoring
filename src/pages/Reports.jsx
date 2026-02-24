@@ -66,19 +66,19 @@ function Reports() {
         <Typography
           variant="h3"
           sx={{
-            fontWeight: 'bold',
-            background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%)',
+            fontWeight: 800,
+            background: 'var(--gradient-primary)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-            textShadow: '0 2px 20px rgba(0,0,0,0.2)',
+            textShadow: '0 4px 15px rgba(0,0,0,0.1)',
             display: 'flex',
             alignItems: 'center',
-            gap: 2
+            gap: 2,
+            fontFamily: "'Outfit', sans-serif"
           }}
         >
-          <span style={{ fontSize: '2.5rem' }}>📄</span>
-          Election Monitoring Reports
+          Election reports
         </Typography>
         <Typography
           variant="body1"
@@ -107,7 +107,7 @@ function Reports() {
             variant="h5"
             sx={{
               fontWeight: 'bold',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'var(--gradient-primary)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
@@ -220,19 +220,19 @@ function Reports() {
               fullWidth
               sx={{
                 height: '56px',
-                background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                background: 'var(--gradient-primary)',
                 color: '#fff',
                 borderRadius: '12px',
                 fontWeight: 'bold',
                 fontSize: '1rem',
                 textTransform: 'none',
-                boxShadow: '0 8px 24px rgba(240, 147, 251, 0.4)',
+                boxShadow: 'var(--shadow-lg)',
                 border: '1px solid rgba(255,255,255,0.3)',
                 transition: 'all 0.3s ease',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                  background: 'var(--gradient-ocean)',
                   transform: 'translateY(-4px)',
-                  boxShadow: '0 12px 32px rgba(240, 147, 251, 0.5)',
+                  boxShadow: 'var(--shadow-xl)',
                 }
               }}
             >
@@ -255,7 +255,7 @@ function Reports() {
             variant="h5"
             sx={{
               fontWeight: 'bold',
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              background: 'var(--gradient-primary)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
@@ -281,7 +281,7 @@ function Reports() {
               <Table>
                 <TableHead>
                   <TableRow sx={{
-                    background: 'linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%)',
+                    background: 'var(--primary-50)',
                   }}>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Report ID</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Type</TableCell>
@@ -299,12 +299,12 @@ function Reports() {
                       sx={{
                         transition: 'all 0.3s ease',
                         '&:nth-of-type(odd)': {
-                          background: 'rgba(240, 147, 251, 0.03)',
+                          background: 'rgba(59, 130, 246, 0.03)',
                         },
                         '&:hover': {
-                          background: 'linear-gradient(135deg, rgba(240, 147, 251, 0.08) 0%, rgba(245, 87, 108, 0.08) 100%)',
+                          background: 'rgba(59, 130, 246, 0.08)',
                           transform: 'scale(1.01)',
-                          boxShadow: '0 4px 16px rgba(240, 147, 251, 0.15)',
+                          boxShadow: 'var(--shadow-md)',
                         }
                       }}
                     >
@@ -362,7 +362,7 @@ function Reports() {
                 sx={{
                   color: 'var(--text-secondary)',
                   fontWeight: 600,
-                  background: 'linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%)',
+                  background: 'var(--primary-50)',
                   display: 'inline-block',
                   px: 3,
                   py: 1,
@@ -400,7 +400,7 @@ function Reports() {
         <DialogTitle sx={{
           fontSize: '1.75rem',
           fontWeight: 'bold',
-          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+          background: 'var(--gradient-primary)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -480,12 +480,12 @@ function Reports() {
               py: 1,
               fontWeight: 600,
               textTransform: 'none',
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              background: 'var(--gradient-primary)',
               color: '#fff',
-              boxShadow: '0 4px 16px rgba(240, 147, 251, 0.3)',
+              boxShadow: 'var(--shadow-md)',
               '&:hover': {
-                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
-                boxShadow: '0 6px 20px rgba(240, 147, 251, 0.4)',
+                background: 'var(--gradient-ocean)',
+                boxShadow: 'var(--shadow-lg)',
               }
             }}
           >

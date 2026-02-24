@@ -12,6 +12,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 
 // Enhanced metric card with visible icon
 const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, subtitle }) => (
@@ -151,6 +152,7 @@ const SeverityCard = ({ severity, count, gradient, icon: IconComp, delay = 0 }) 
 
 function Dashboard() {
   const { volunteers, incidents, reports } = useData();
+  const { user } = useAuth();
 
   // Calculate metrics
   const activeVolunteers = volunteers.filter(v => v.status === 'Active').length;
@@ -207,7 +209,7 @@ function Dashboard() {
           }}
         >
           <HowToVoteIcon sx={{ fontSize: '2.5rem', color: '#fff', WebkitTextFillColor: '#fff' }} />
-          Election Monitoring Dashboard
+          {user?.role} Dashboard
         </Typography>
         <Typography
           variant="body1"
@@ -216,10 +218,14 @@ function Dashboard() {
             color: 'rgba(255,255,255,0.85)',
             fontSize: '1.05rem',
             fontWeight: 500,
-            mt: 0.5
+            mt: 0.5,
+            maxWidth: '700px'
           }}
         >
-          Real-time insights and monitoring for transparent elections
+          {user?.role === 'Admin' && "Manage the system parameters, monitor real-time election data streams, and ensure platform security standards."}
+          {user?.role === 'Citizen' && "Tracking the election process in real-time, reporting local issues, and engaging in community transparency."}
+          {user?.role === 'Election Observer' && "Monitoring field activities, reporting process anomalies, and ensuring fairness and democratic transparency."}
+          {user?.role === 'Data Analyst' && "Analyzing election data trends, generating comprehensive reports, and providing real-time analytical updates."}
         </Typography>
       </Box>
 
