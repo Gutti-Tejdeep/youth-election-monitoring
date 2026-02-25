@@ -3,34 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 // MUI Imports
-import { Box, Button, Container, TextField, Typography, Alert, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, Alert, Paper } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Logo from '../components/Logo';
 
 function LoginPage() {
-  const [isLogin, setIsLogin] = useState(true); // Toggle state
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState(''); // New state for registration
-  const [role, setRole] = useState('Citizen'); // Default role
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('Citizen');
   const [error, setError] = useState('');
 
-  // Roles available
   const roles = [
     { id: 'Admin', label: 'Admin' },
     { id: 'Citizen', label: 'Citizen' },
-    { id: 'Election Observer', label: 'Election Observer' },
-    { id: 'Data Analyst', label: 'Data Analyst' }
+    { id: 'Election Observer', label: 'Observer' },
+    { id: 'Data Analyst', label: 'Analyst' }
   ];
 
-  // Captcha State
   const [captchaValue, setCaptchaValue] = useState('');
   const [captchaInput, setCaptchaInput] = useState('');
 
   const navigate = useNavigate();
   const { login, register } = useAuth();
 
-  // Generate random captcha on mount and when refreshed
   useEffect(() => {
     generateCaptcha();
   }, []);
@@ -49,7 +46,6 @@ function LoginPage() {
     event.preventDefault();
     setError('');
 
-    // Basic validation
     if (!email || !password) {
       setError('Please enter an email and password.');
       return;
@@ -60,21 +56,18 @@ function LoginPage() {
       return;
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address.');
       return;
     }
 
-    // Captcha Validation
     if (captchaInput !== captchaValue) {
       setError('Incorrect CAPTCHA. Please try again.');
-      generateCaptcha(); // Regenerate on failure for security
+      generateCaptcha();
       return;
     }
 
-    // Simulate network delay
     setTimeout(() => {
       try {
         if (isLogin) {
@@ -85,7 +78,7 @@ function LoginPage() {
         navigate('/home');
       } catch (err) {
         setError(err.message || 'Login failed. Please try again.');
-        generateCaptcha(); // Regenerate on failure
+        generateCaptcha();
       }
     }, 500);
   };
@@ -93,7 +86,7 @@ function LoginPage() {
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setError('');
-    generateCaptcha(); // Regenerate when switching modes
+    generateCaptcha();
   };
 
   return (
@@ -106,235 +99,305 @@ function LoginPage() {
         padding: 2,
       }}
     >
-      <Container component="main" maxWidth="xs">
+      {/* Horizontal card container */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          width: '100%',
+          maxWidth: '900px',
+          minHeight: { md: '560px' },
+          borderRadius: '24px',
+          overflow: 'hidden',
+          boxShadow: '0 24px 64px rgba(0,0,0,0.3)',
+          border: '1px solid rgba(255,255,255,0.25)',
+        }}
+      >
+        {/* LEFT PANEL — Branding */}
         <Box
-          className="glass-card floating"
           sx={{
+            flex: '0 0 42%',
+            background: 'var(--gradient-primary)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: 5,
-            background: 'rgba(255, 255, 255, 0.25)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: 4,
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            justifyContent: 'center',
+            p: 5,
+            gap: 3,
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          <Box
+          {/* decorative circles */}
+          <Box sx={{
+            position: 'absolute', width: 220, height: 220,
+            borderRadius: '50%', background: 'rgba(255,255,255,0.07)',
+            top: -60, right: -60,
+          }} />
+          <Box sx={{
+            position: 'absolute', width: 160, height: 160,
+            borderRadius: '50%', background: 'rgba(255,255,255,0.05)',
+            bottom: -40, left: -40,
+          }} />
+
+          <Logo size={90} color1="#ffffff" color2="rgba(255,255,255,0.6)" />
+
+          <Typography
+            variant="h3"
             sx={{
-              mb: 2,
-              filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))',
-              animation: 'float 6s ease-in-out infinite'
+              fontWeight: 900,
+              color: '#fff',
+              textShadow: '0 4px 15px rgba(0,0,0,0.3)',
+              letterSpacing: '3px',
+              fontFamily: "'Outfit', sans-serif",
+              textAlign: 'center',
             }}
           >
-            <Logo size={100} color1="#fff" color2="#94a3b8" />
-          </Box>
-          <Typography component="h1" variant="h3" sx={{
-            fontWeight: 900,
-            color: '#fff',
-            textShadow: '0 4px 15px rgba(0,0,0,0.3)',
-            letterSpacing: '2px',
-            fontFamily: "'Outfit', sans-serif"
-          }}>
             YEM
           </Typography>
 
-          <Box sx={{ mt: 3, width: '100%' }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mb: 1, fontWeight: 600 }}>
-              Select Login Type:
-            </Typography>
-            <Box sx={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 1,
-              mb: 2
-            }}>
-              {roles.map((r) => (
-                <Button
-                  key={r.id}
-                  onClick={() => setRole(r.id)}
-                  variant={role === r.id ? 'contained' : 'outlined'}
-                  size="small"
-                  sx={{
-                    fontSize: '0.7rem',
-                    py: 1,
-                    textTransform: 'none',
+          <Typography
+            variant="body1"
+            sx={{
+              color: 'rgba(255,255,255,0.85)',
+              textAlign: 'center',
+              lineHeight: 1.7,
+              fontWeight: 500,
+              maxWidth: '260px',
+            }}
+          >
+            Youth Election Monitoring — ensuring transparency and fairness in every election.
+          </Typography>
+
+          {/* Role badge strip */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center', mt: 1 }}>
+            {roles.map((r) => (
+              <Box
+                key={r.id}
+                sx={{
+                  px: 1.5, py: 0.4,
+                  borderRadius: '20px',
+                  background: 'rgba(255,255,255,0.15)',
+                  border: '1px solid rgba(255,255,255,0.25)',
+                  color: '#fff',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                }}
+              >
+                {r.label}
+              </Box>
+            ))}
+          </Box>
+        </Box>
+
+        {/* RIGHT PANEL — Form */}
+        <Box
+          sx={{
+            flex: 1,
+            background: 'rgba(255,255,255,0.18)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            p: { xs: 4, md: 5 },
+            overflowY: 'auto',
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 800,
+              color: '#fff',
+              mb: 0.5,
+              fontFamily: "'Outfit', sans-serif",
+            }}
+          >
+            {isLogin ? 'Welcome back' : 'Create account'}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3 }}>
+            {isLogin ? 'Sign in to continue to your dashboard' : 'Register to start monitoring elections'}
+          </Typography>
+
+          {/* Role selector */}
+          <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)', mb: 0.75, fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+            Login As
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, mb: 3 }}>
+            {roles.map((r) => (
+              <Button
+                key={r.id}
+                onClick={() => setRole(r.id)}
+                variant={role === r.id ? 'contained' : 'outlined'}
+                size="small"
+                sx={{
+                  fontSize: '0.72rem',
+                  py: 0.9,
+                  textTransform: 'none',
+                  borderRadius: '10px',
+                  borderColor: 'rgba(255,255,255,0.3)',
+                  color: role === r.id ? '#fff' : 'rgba(255,255,255,0.75)',
+                  background: role === r.id ? 'rgba(255,255,255,0.25)' : 'transparent',
+                  backdropFilter: role === r.id ? 'blur(10px)' : 'none',
+                  '&:hover': {
+                    background: role === r.id ? 'rgba(255,255,255,0.25)' : 'transparent',
                     borderColor: 'rgba(255,255,255,0.3)',
-                    color: role === r.id ? '#fff' : 'rgba(255,255,255,0.7)',
-                    background: role === r.id ? 'rgba(255,255,255,0.2)' : 'transparent',
-                    backdropFilter: role === r.id ? 'blur(10px)' : 'none',
-                    '&:hover': {
-                      borderColor: '#fff',
-                      background: 'rgba(255,255,255,0.1)',
-                    }
-                  }}
-                >
-                  {r.label}
-                </Button>
-              ))}
-            </Box>
+                    boxShadow: 'none',
+                  },
+                }}
+              >
+                {r.label}
+              </Button>
+            ))}
           </Box>
 
-          <Typography component="h2" variant="subtitle1" sx={{ mt: 1, color: 'rgba(255,255,255,0.9)', fontWeight: 500 }}>
-            {isLogin ? `${role} Login` : `Register as ${role}`}
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3, width: '100%' }}>
+          {/* Form */}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {!isLogin && (
               <TextField
-                margin="normal"
                 required
                 fullWidth
+                size="small"
                 id="username"
                 label="Username"
                 name="username"
                 autoComplete="username"
-                autoFocus
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    background: 'rgba(255, 255, 255, 0.9)',
-                    borderRadius: 2,
-                    '& fieldset': {
-                      borderColor: 'rgba(255, 255, 255, 0.5)',
-                    },
+                    background: 'rgba(255,255,255,0.88)',
+                    borderRadius: '10px',
+                    '& fieldset': { borderColor: 'transparent' },
                   },
                 }}
               />
             )}
+
             <TextField
-              margin="normal"
               required
               fullWidth
+              size="small"
               id="email"
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus={isLogin}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  borderRadius: 2,
-                  '& fieldset': {
-                    borderColor: 'rgba(255, 255, 255, 0.5)',
-                  },
+                  background: 'rgba(255,255,255,0.88)',
+                  borderRadius: '10px',
+                  '& fieldset': { borderColor: 'transparent' },
                 },
               }}
             />
+
             <TextField
-              margin="normal"
               required
               fullWidth
+              size="small"
               name="password"
               label="Password"
               type="password"
               id="password"
-              autoComplete={isLogin ? "current-password" : "new-password"}
+              autoComplete={isLogin ? 'current-password' : 'new-password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  borderRadius: 2,
-                  '& fieldset': {
-                    borderColor: 'rgba(255, 255, 255, 0.5)',
-                  },
+                  background: 'rgba(255,255,255,0.88)',
+                  borderRadius: '10px',
+                  '& fieldset': { borderColor: 'transparent' },
                 },
               }}
             />
 
-            {/* Captcha Section */}
-            <Box sx={{ mt: 2, mb: 1 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <Paper
-                  variant="outlined"
-                  sx={{
-                    p: 2,
-                    mr: 1,
-                    flexGrow: 1,
-                    textAlign: 'center',
-                    background: 'var(--gradient-primary)',
-                    color: '#fff',
-                    letterSpacing: '8px',
-                    fontWeight: 'bold',
-                    fontSize: '1.5rem',
-                    fontFamily: 'monospace',
-                    userSelect: 'none',
-                    borderRadius: 2,
-                    border: 'none',
-                    boxShadow: 'var(--shadow-md)',
-                  }}
-                >
-                  {captchaValue}
-                </Paper>
-                <Button
-                  onClick={generateCaptcha}
-                  size="small"
-                  sx={{
-                    minWidth: 'auto',
-                    p: 1.5,
-                    background: 'rgba(255, 255, 255, 0.9)',
-                    borderRadius: 2,
-                    '&:hover': {
-                      background: '#fff',
-                    }
-                  }}
-                >
-                  <RefreshIcon />
-                </Button>
-              </Box>
-              <TextField
-                required
-                fullWidth
-                size="medium"
-                id="captcha"
-                label="Enter CAPTCHA"
-                name="captcha"
-                value={captchaInput}
-                onChange={(e) => setCaptchaInput(e.target.value)}
-                placeholder="Type the characters above"
+            {/* CAPTCHA */}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Paper
                 sx={{
-                  '& .MuiOutlinedInput-root': {
-                    background: 'rgba(255, 255, 255, 0.9)',
-                    borderRadius: 2,
-                    '& fieldset': {
-                      borderColor: 'rgba(255, 255, 255, 0.5)',
-                    },
+                  flex: 1,
+                  py: 1,
+                  textAlign: 'center',
+                  background: 'var(--gradient-primary)',
+                  color: '#fff',
+                  letterSpacing: '8px',
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
+                  fontFamily: 'monospace',
+                  userSelect: 'none',
+                  borderRadius: '10px',
+                  border: 'none',
+                  boxShadow: 'none',
+                }}
+              >
+                {captchaValue}
+              </Paper>
+              <Button
+                onClick={generateCaptcha}
+                size="small"
+                sx={{
+                  minWidth: 'auto',
+                  p: 1,
+                  background: 'rgba(255,255,255,0.88)',
+                  borderRadius: '10px',
+                  '&:hover': {
+                    background: 'rgba(255,255,255,0.88)',
+                    boxShadow: 'none',
                   },
                 }}
-              />
+              >
+                <RefreshIcon fontSize="small" />
+              </Button>
             </Box>
 
-            {/* Display error message if 'error' state is not empty */}
+            <TextField
+              required
+              fullWidth
+              size="small"
+              id="captcha"
+              label="Enter CAPTCHA"
+              name="captcha"
+              value={captchaInput}
+              onChange={(e) => setCaptchaInput(e.target.value)}
+              placeholder="Type the characters above"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  background: 'rgba(255,255,255,0.88)',
+                  borderRadius: '10px',
+                  '& fieldset': { borderColor: 'transparent' },
+                },
+              }}
+            />
+
             {error && (
-              <Alert severity="error" sx={{ width: '100%', mt: 2, borderRadius: 2 }}>
+              <Alert severity="error" sx={{ borderRadius: '10px' }}>
                 {error}
               </Alert>
             )}
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{
-                mt: 3,
-                mb: 2,
-                py: 1.5,
-                borderRadius: 2,
+                mt: 0.5,
+                py: 1.2,
+                borderRadius: '10px',
                 background: 'var(--gradient-primary)',
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 fontWeight: 'bold',
                 boxShadow: 'var(--shadow-lg)',
                 '&:hover': {
-                  background: 'var(--gradient-ocean)',
-                  boxShadow: 'var(--shadow-xl)',
-                }
+                  background: 'var(--gradient-primary)',
+                  boxShadow: 'var(--shadow-lg)',
+                },
               }}
             >
               {isLogin ? 'Sign In' : 'Sign Up'}
             </Button>
+
             <Button
               fullWidth
               variant="text"
@@ -342,16 +405,18 @@ function LoginPage() {
               sx={{
                 color: '#fff',
                 fontWeight: 500,
+                fontSize: '0.85rem',
                 '&:hover': {
-                  background: 'rgba(255, 255, 255, 0.1)',
-                }
+                  background: 'transparent',
+                  color: '#fff',
+                },
               }}
             >
-              {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+              {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Login'}
             </Button>
           </Box>
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 }

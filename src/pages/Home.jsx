@@ -80,6 +80,7 @@ function Home() {
       {/* Hero Section */}
       <Box sx={{
         minHeight: '75vh',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -104,9 +105,15 @@ function Home() {
           borderRadius: '50%'
         }} />
 
-        <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
+        <Container maxWidth="md" sx={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+        }}>
           <Box
-            className="floating"
             sx={{
               mb: 4,
               display: 'inline-flex',
@@ -142,7 +149,7 @@ function Home() {
             size="large"
             onClick={() => navigate(currentConfig.primaryAction.path)}
             startIcon={<DashboardIcon />}
-            className="slide-in-up stagger-2 hover-lift"
+            className="slide-in-up stagger-2"
             sx={{
               px: 6,
               py: 2,
@@ -152,10 +159,6 @@ function Home() {
               background: currentConfig.gradient,
               boxShadow: 'var(--shadow-lg)',
               textTransform: 'none',
-              '&:hover': {
-                transform: 'translateY(-5px) scale(1.05)',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-              }
             }}
           >
             {currentConfig.primaryAction.label}
@@ -182,11 +185,6 @@ function Home() {
                   borderRadius: '24px',
                   border: '1px solid rgba(255,255,255,0.3)',
                   transition: 'all 0.4s ease',
-                  '&:hover': {
-                    background: '#fff',
-                    transform: 'translateY(-10px)',
-                    boxShadow: '0 30px 60px rgba(0,0,0,0.12)'
-                  }
                 }}
               >
                 <Box sx={{

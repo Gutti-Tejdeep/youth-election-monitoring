@@ -28,22 +28,6 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
       overflow: 'hidden',
       cursor: 'pointer',
       borderRadius: '20px',
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        top: '-50%',
-        right: '-50%',
-        width: '200%',
-        height: '200%',
-        background: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%)',
-        opacity: 0,
-        transition: 'opacity 0.5s ease',
-      },
-      '&:hover::after': { opacity: 1 },
-      '&:hover': {
-        transform: 'translateY(-10px) scale(1.02)',
-        boxShadow: '0 24px 64px rgba(0, 0, 0, 0.3)',
-      }
     }}
   >
     <CardContent sx={{
@@ -130,10 +114,6 @@ const SeverityCard = ({ severity, count, gradient, icon: IconComp, delay = 0 }) 
         height: '2px',
         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
       },
-      '&:hover': {
-        transform: 'translateY(-8px) scale(1.05)',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
-      }
     }}
   >
     {IconComp && (
@@ -386,11 +366,6 @@ function Dashboard() {
                           p: 2,
                           border: '1px solid rgba(102, 126, 234, 0.12)',
                           transition: 'all 0.3s ease',
-                          '&:hover': {
-                            transform: 'translateX(6px)',
-                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%)',
-                            boxShadow: '0 6px 20px rgba(102, 126, 234, 0.15)',
-                          }
                         }}
                       >
                         <Avatar sx={{
@@ -502,11 +477,6 @@ function Dashboard() {
                       p: 1.5,
                       border: '1px solid rgba(240, 147, 251, 0.12)',
                       transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateX(4px)',
-                        background: 'linear-gradient(135deg, rgba(240, 147, 251, 0.12) 0%, rgba(245, 87, 108, 0.12) 100%)',
-                        boxShadow: '0 4px 16px rgba(240, 147, 251, 0.15)',
-                      }
                     }}
                   >
                     <Box sx={{ mr: 1.5 }}>{activityIcon(activity.type)}</Box>

@@ -144,12 +144,6 @@ function Volunteers() {
               '& .MuiOutlinedInput-root': {
                 borderRadius: '16px',
                 background: 'rgba(102, 126, 234, 0.05)',
-                '&:hover': {
-                  background: 'rgba(102, 126, 234, 0.08)',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'var(--primary-500)',
-                },
                 '&.Mui-focused': {
                   background: 'rgba(102, 126, 234, 0.1)',
                 },
@@ -176,11 +170,6 @@ function Volunteers() {
               boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)',
               border: '1px solid rgba(255,255,255,0.3)',
               transition: 'all 0.3s ease',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                transform: 'translateY(-4px)',
-                boxShadow: '0 12px 32px rgba(102, 126, 234, 0.5)',
-              }
             }}
           >
             Add Volunteer
@@ -224,11 +213,6 @@ function Volunteers() {
                         '&:nth-of-type(odd)': {
                           background: 'rgba(102, 126, 234, 0.03)',
                         },
-                        '&:hover': {
-                          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%)',
-                          transform: 'scale(1.01)',
-                          boxShadow: '0 4px 16px rgba(102, 126, 234, 0.15)',
-                        }
                       }}
                     >
                       <TableCell sx={{ fontWeight: 600, color: 'var(--primary-600)' }}>{volunteer.id}</TableCell>
@@ -322,9 +306,6 @@ function Volunteers() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -344,9 +325,6 @@ function Volunteers() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -368,9 +346,6 @@ function Volunteers() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -391,9 +366,6 @@ function Volunteers() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -414,9 +386,6 @@ function Volunteers() {
               fontWeight: 600,
               textTransform: 'none',
               color: 'var(--text-secondary)',
-              '&:hover': {
-                background: 'rgba(0,0,0,0.05)',
-              }
             }}
           >
             Cancel
@@ -432,10 +401,6 @@ function Volunteers() {
               fontWeight: 'bold',
               textTransform: 'none',
               boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
-              }
             }}
           >
             Add Volunteer

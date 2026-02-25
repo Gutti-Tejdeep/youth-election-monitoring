@@ -120,12 +120,6 @@ function Interaction() {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '16px',
                   background: 'rgba(102, 126, 234, 0.03)',
-                  '&:hover': {
-                    background: 'rgba(102, 126, 234, 0.06)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'var(--primary-500)',
-                  },
                   '&.Mui-focused fieldset': {
                     borderColor: 'var(--primary-600)',
                     borderWidth: '2px',
@@ -147,10 +141,6 @@ function Interaction() {
                 fontWeight: 'bold',
                 textTransform: 'none',
                 boxShadow: 'var(--shadow-md)',
-                '&:hover': {
-                  background: 'var(--gradient-ocean)',
-                  boxShadow: 'var(--shadow-lg)',
-                },
                 '&:disabled': {
                   background: 'rgba(0,0,0,0.12)',
                   color: 'rgba(0,0,0,0.26)'
@@ -220,11 +210,6 @@ function Interaction() {
                       border: '1px solid rgba(255,255,255,0.5)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
                       transition: 'all 0.2s ease',
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 6px 16px rgba(0,0,0,0.06)',
-                        background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%)',
-                      }
                     }}
                   >
                     <ListItemAvatar sx={{ mt: 0.5 }}>

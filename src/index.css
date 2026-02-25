@@ -75,7 +75,6 @@
   --glass-border: 1px solid rgba(255, 255, 255, 0.18);
   --glass-border-strong: 1px solid rgba(255, 255, 255, 0.3);
   --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.25);
-  --glass-shadow-hover: 0 12px 48px 0 rgba(15, 23, 42, 0.35);
 
   /* Shadow System */
   --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
@@ -165,23 +164,6 @@ code {
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
-}
-
-.glass-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-  opacity: 0.6;
-}
-
-.glass-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-2xl);
-  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* Gradient Border Effect */
@@ -370,36 +352,7 @@ code {
   background-clip: padding-box;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--primary-600), var(--accent-600));
-  background-clip: padding-box;
-}
 
-/* Hover Effects */
-.hover-lift {
-  transition: all var(--transition-base);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.hover-glow {
-  transition: all var(--transition-base);
-}
-
-.hover-glow:hover {
-  box-shadow: var(--shadow-glow);
-}
-
-.hover-scale {
-  transition: transform var(--transition-base);
-}
-
-.hover-scale:hover {
-  transform: scale(1.05);
-}
 
 /* Gradient Text */
 .gradient-text {
@@ -422,28 +375,6 @@ code {
   transition: all var(--transition-base);
 }
 
-.premium-card::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity var(--transition-slow);
-  pointer-events: none;
-}
-
-.premium-card:hover::after {
-  opacity: 1;
-}
-
-.premium-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: var(--shadow-2xl), var(--shadow-glow);
-}
-
 /* Responsive Design */
 @media (prefers-reduced-motion: reduce) {
 
@@ -456,12 +387,4 @@ code {
   }
 }
 
-@media (max-width: 768px) {
-  .glass-card:hover {
-    transform: translateY(-4px);
-  }
-
-  .premium-card:hover {
-    transform: translateY(-4px) scale(1.01);
-  }
-}
+@media (max-width: 768px) {}

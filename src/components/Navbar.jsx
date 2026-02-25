@@ -47,7 +47,6 @@ function Navbar({ toggleSidebar }) {
   return (
     <AppBar
       position="fixed"
-      className="glass-heavy"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
         background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
@@ -61,20 +60,6 @@ function Navbar({ toggleSidebar }) {
         top: '16px',
         borderRadius: '24px',
         transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        '&:hover': {
-          boxShadow: '0 12px 48px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12)',
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%)',
-        },
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '2px',
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
-          borderRadius: '24px 24px 0 0',
-        }
       }}
     >
       <Toolbar sx={{ minHeight: '70px !important', px: 3, gap: 1.5 }}>
@@ -84,18 +69,12 @@ function Navbar({ toggleSidebar }) {
           aria-label="toggle sidebar"
           onClick={toggleSidebar}
           edge="start"
-          className="hover-scale"
           sx={{
             mr: 1,
             background: 'rgba(255, 255, 255, 0.15)',
             backdropFilter: 'blur(10px)',
             border: '1px solid rgba(255, 255, 255, 0.3)',
             transition: 'all 0.3s ease',
-            '&:hover': {
-              background: 'rgba(255, 255, 255, 0.25)',
-              transform: 'scale(1.1) rotate(90deg)',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
-            }
           }}
         >
           <MenuIcon />
@@ -103,7 +82,7 @@ function Navbar({ toggleSidebar }) {
 
         {/* App Title */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexGrow: 1 }}>
-          <Box className="hover-scale" sx={{ cursor: 'pointer' }} onClick={() => navigate('/home')}>
+          <Box sx={{ cursor: 'pointer' }} onClick={() => navigate('/home')}>
             <Logo size={48} color1="#ffffff" color2="rgba(255,255,255,0.7)" />
           </Box>
           <Typography
@@ -161,7 +140,6 @@ function Navbar({ toggleSidebar }) {
                   borderRadius: '12px',
                   color: '#fff',
                   '& fieldset': { borderColor: 'rgba(255,255,255,0.4)' },
-                  '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.7)' },
                   '&.Mui-focused fieldset': { borderColor: '#fff' },
                 },
                 '& input[type="date"]::-webkit-calendar-picker-indicator': {
@@ -189,12 +167,6 @@ function Navbar({ toggleSidebar }) {
                   py: 0.8,
                   whiteSpace: 'nowrap',
                   transition: 'all 0.3s ease',
-                  '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.25)',
-                    border: '1px solid rgba(255,255,255,0.6)',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
-                  }
                 }}
               >
                 📅 {formatDate(electionDate)}
@@ -226,7 +198,6 @@ function Navbar({ toggleSidebar }) {
           color="inherit"
           onClick={onLogoutClick}
           startIcon={<LogoutIcon />}
-          className="hover-lift"
           sx={{
             borderRadius: '16px',
             background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(238, 90, 111, 0.9) 100%)',
@@ -239,11 +210,6 @@ function Navbar({ toggleSidebar }) {
             textTransform: 'none',
             boxShadow: '0 4px 16px rgba(255, 107, 107, 0.3)',
             transition: 'all 0.3s ease',
-            '&:hover': {
-              background: 'linear-gradient(135deg, rgba(238, 90, 111, 0.95) 0%, rgba(255, 107, 107, 0.95) 100%)',
-              transform: 'translateY(-3px)',
-              boxShadow: '0 8px 24px rgba(255, 107, 107, 0.4)',
-            }
           }}
         >
           Logout

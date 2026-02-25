@@ -12,7 +12,7 @@ function Layout() {
   };
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
       <Navbar toggleSidebar={toggleSidebar} />
       <Sidebar isOpen={isSidebarOpen} handleDrawerToggle={toggleSidebar} />
       <Box
@@ -20,18 +20,12 @@ function Layout() {
         sx={{
           flexGrow: 1,
           p: 3,
-          marginTop: '64px',
-          marginLeft: { xs: 0, sm: isSidebarOpen ? '240px' : 0 },
-          height: 'calc(100vh - 80px)',
+          marginTop: isSidebarOpen ? '140px' : '80px',
+          height: isSidebarOpen ? 'calc(100vh - 140px)' : 'calc(100vh - 80px)',
           overflowY: 'auto',
-          transition: (theme) =>
-            theme.transitions.create('margin', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen,
-            }),
+          transition: 'margin-top 0.3s ease, height 0.3s ease',
         }}
       >
-        {/* Outlet renders the nested child route (Home, Reports, etc.) */}
         <Outlet />
       </Box>
     </Box>

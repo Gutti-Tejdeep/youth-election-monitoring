@@ -24,7 +24,7 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import { useData } from '../context/DataContext';
 
 function Reports() {
-  const { reports, addReport } = useData();
+  const { reports, addReport, incidents } = useData();
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
   const [reportType, setReportType] = useState('Summary');
@@ -37,17 +37,42 @@ function Reports() {
       return;
     }
 
+    // Filter incidents based on date range
+    const start = new Date(dateStart);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(dateEnd);
+    end.setHours(23, 59, 59, 999);
+
+    const filteredIncidents = incidents.filter(incident => {
+      const incidentDate = new Date(incident.reportedOn);
+      return incidentDate >= start && incidentDate <= end;
+    });
+
+    // Calculate metrics
+    const stats = {
+      total: filteredIncidents.length,
+      highSeverity: filteredIncidents.filter(i => i.severity === 'High').length,
+      mediumSeverity: filteredIncidents.filter(i => i.severity === 'Medium').length,
+      lowSeverity: filteredIncidents.filter(i => i.severity === 'Low').length,
+      resolved: filteredIncidents.filter(i => i.status === 'Resolved').length,
+      open: filteredIncidents.filter(i => i.status === 'Open').length
+    };
+
     // Create a new report
     const newReport = {
       id: `RPT-${Date.now()}`,
       type: reportType,
       dateRange: `${dateStart} to ${dateEnd}`,
       generatedOn: new Date().toLocaleString(),
-      status: 'Generated'
+      status: 'Generated',
+      data: filteredIncidents,
+      stats: stats
     };
 
     addReport(newReport);
-    alert('Report generated successfully!');
+    setSelectedReport(newReport);
+    setViewDialogOpen(true);
+    alert('Report generated successfully! Previewing summary...');
   };
 
   const handleViewReport = (report) => {
@@ -58,6 +83,15 @@ function Reports() {
   const handleCloseDialog = () => {
     setViewDialogOpen(false);
     setSelectedReport(null);
+  };
+
+  const getSeverityColor = (severity) => {
+    switch (severity) {
+      case 'High': return '#ff4d4d';
+      case 'Medium': return '#ffa500';
+      case 'Low': return '#4da6ff';
+      default: return '#888';
+    }
   };
 
   return (
@@ -131,12 +165,6 @@ function Reports() {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '12px',
                   background: 'rgba(102, 126, 234, 0.05)',
-                  '&:hover': {
-                    background: 'rgba(102, 126, 234, 0.08)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'var(--primary-500)',
-                  },
                   '&.Mui-focused': {
                     background: 'rgba(102, 126, 234, 0.1)',
                   },
@@ -160,12 +188,6 @@ function Reports() {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '12px',
                   background: 'rgba(102, 126, 234, 0.05)',
-                  '&:hover': {
-                    background: 'rgba(102, 126, 234, 0.08)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'var(--primary-500)',
-                  },
                   '&.Mui-focused': {
                     background: 'rgba(102, 126, 234, 0.1)',
                   },
@@ -189,12 +211,6 @@ function Reports() {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '12px',
                   background: 'rgba(102, 126, 234, 0.05)',
-                  '&:hover': {
-                    background: 'rgba(102, 126, 234, 0.08)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'var(--primary-500)',
-                  },
                   '&.Mui-focused': {
                     background: 'rgba(102, 126, 234, 0.1)',
                   },
@@ -229,11 +245,6 @@ function Reports() {
                 boxShadow: 'var(--shadow-lg)',
                 border: '1px solid rgba(255,255,255,0.3)',
                 transition: 'all 0.3s ease',
-                '&:hover': {
-                  background: 'var(--gradient-ocean)',
-                  transform: 'translateY(-4px)',
-                  boxShadow: 'var(--shadow-xl)',
-                }
               }}
             >
               Generate Report
@@ -261,7 +272,7 @@ function Reports() {
               backgroundClip: 'text'
             }}
           >
-            Generated Reports
+            History of Generated Reports
           </Typography>
         </Box>
 
@@ -287,7 +298,7 @@ function Reports() {
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Type</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Date Range</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Generated On</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Entries</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Action</TableCell>
                   </TableRow>
                 </TableHead>
@@ -301,11 +312,6 @@ function Reports() {
                         '&:nth-of-type(odd)': {
                           background: 'rgba(59, 130, 246, 0.03)',
                         },
-                        '&:hover': {
-                          background: 'rgba(59, 130, 246, 0.08)',
-                          transform: 'scale(1.01)',
-                          boxShadow: 'var(--shadow-md)',
-                        }
                       }}
                     >
                       <TableCell sx={{ fontWeight: 600, color: 'var(--secondary-600)' }}>{report.id}</TableCell>
@@ -316,16 +322,9 @@ function Reports() {
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={report.status}
+                          label={report.data?.length || 0}
                           size="small"
-                          sx={{
-                            background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-                            color: '#fff',
-                            fontWeight: 'bold',
-                            px: 1.5,
-                            boxShadow: '0 4px 12px rgba(67, 233, 123, 0.3)',
-                            border: '1px solid rgba(255,255,255,0.3)',
-                          }}
+                          sx={{ fontWeight: 'bold', background: 'var(--primary-100)', color: 'var(--primary-700)' }}
                         />
                       </TableCell>
                       <TableCell>
@@ -341,14 +340,9 @@ function Reports() {
                             fontWeight: 600,
                             textTransform: 'none',
                             px: 2,
-                            '&:hover': {
-                              borderColor: 'var(--primary-600)',
-                              background: 'rgba(102, 126, 234, 0.08)',
-                              transform: 'translateY(-2px)',
-                            }
                           }}
                         >
-                          View Report
+                          View Details
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -380,116 +374,150 @@ function Reports() {
       <Dialog
         open={viewDialogOpen}
         onClose={handleCloseDialog}
-        maxWidth="md"
+        maxWidth="lg"
         fullWidth
         PaperProps={{
           sx: {
             borderRadius: '24px',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)',
-            backdropFilter: 'blur(20px)',
+            background: '#fff',
             boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
-          }
-        }}
-        BackdropProps={{
-          sx: {
-            backdropFilter: 'blur(8px)',
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            maxHeight: '90vh'
           }
         }}
       >
         <DialogTitle sx={{
-          fontSize: '1.75rem',
-          fontWeight: 'bold',
-          background: 'var(--gradient-primary)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-          pb: 1
+          p: 3,
+          borderBottom: '1px solid rgba(0,0,0,0.05)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
         }}>
-          Report Details - {selectedReport?.id}
+          <Typography variant="h5" sx={{ fontWeight: 800, background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Report Summary: {selectedReport?.id}
+          </Typography>
+          <Chip label={selectedReport?.type} color="primary" sx={{ fontWeight: 'bold' }} />
         </DialogTitle>
-        <DialogContent sx={{ pt: 3 }}>
+        <DialogContent sx={{ p: 4 }}>
           {selectedReport && (
-            <Box sx={{ py: 2 }}>
-              <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: 'var(--text-primary)' }}>
-                {selectedReport.type} Report
-              </Typography>
-              <Grid container spacing={2} sx={{ mt: 2 }}>
-                <Grid item xs={12} sm={6}>
-                  <Paper sx={{
-                    p: 2,
-                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%)',
-                    borderRadius: '12px',
-                    border: '1px solid rgba(102, 126, 234, 0.2)'
-                  }}>
-                    <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 600 }}>
-                      Date Range
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 600, mt: 0.5 }}>
-                      {selectedReport.dateRange}
-                    </Typography>
-                  </Paper>
+            <Box>
+              {/* Header Info */}
+              <Grid container spacing={3} sx={{ mb: 4 }}>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ p: 2, borderRadius: '16px', background: 'rgba(102, 126, 234, 0.05)', border: '1px solid rgba(102, 126, 234, 0.1)' }}>
+                    <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>Date Range</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mt: 0.5 }}>{selectedReport.dateRange}</Typography>
+                  </Box>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Paper sx={{
-                    p: 2,
-                    background: 'linear-gradient(135deg, rgba(240, 147, 251, 0.08) 0%, rgba(245, 87, 108, 0.08) 100%)',
-                    borderRadius: '12px',
-                    border: '1px solid rgba(240, 147, 251, 0.2)'
-                  }}>
-                    <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 600 }}>
-                      Generated On
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 600, mt: 0.5 }}>
-                      {selectedReport.generatedOn}
-                    </Typography>
-                  </Paper>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ p: 2, borderRadius: '16px', background: 'rgba(48, 207, 208, 0.05)', border: '1px solid rgba(48, 207, 208, 0.1)' }}>
+                    <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>Generated On</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mt: 0.5 }}>{selectedReport.generatedOn}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ p: 2, borderRadius: '16px', background: 'rgba(255, 107, 107, 0.05)', border: '1px solid rgba(255, 107, 107, 0.1)' }}>
+                    <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 700, textTransform: 'uppercase' }}>Total Records</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mt: 0.5 }}>{selectedReport.data?.length || 0} Incidents</Typography>
+                  </Box>
                 </Grid>
               </Grid>
 
-              <Box sx={{
-                mt: 4,
-                p: 3,
-                background: 'linear-gradient(135deg, rgba(67, 233, 123, 0.08) 0%, rgba(56, 249, 215, 0.08) 100%)',
+              {/* Stats Summary */}
+              {selectedReport.stats && (
+                <Grid container spacing={2} sx={{ mb: 4 }}>
+                  {[
+                    { label: 'High Severity', value: selectedReport.stats.highSeverity, color: '#f87171' },
+                    { label: 'Medium Severity', value: selectedReport.stats.mediumSeverity, color: '#fbbf24' },
+                    { label: 'Low Severity', value: selectedReport.stats.lowSeverity, color: '#60a5fa' },
+                    { label: 'Resolved', value: selectedReport.stats.resolved, color: '#34d399' },
+                    { label: 'Open', value: selectedReport.stats.open, color: '#fca5a5' }
+                  ].map((stat, idx) => (
+                    <Grid item xs={6} sm={4} md={2.4} key={idx}>
+                      <Paper elevation={0} sx={{ p: 2, textAlign: 'center', borderRadius: '16px', border: `1px solid ${stat.color}44`, background: `${stat.color}08` }}>
+                        <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 600 }}>{stat.label}</Typography>
+                        <Typography variant="h4" sx={{ fontWeight: 800, color: stat.color }}>{stat.value}</Typography>
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+
+              {/* Data Table */}
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <AssessmentIcon color="primary" /> Detailed Incident Logs
+              </Typography>
+
+              <TableContainer sx={{
                 borderRadius: '16px',
-                border: '1px solid rgba(67, 233, 123, 0.2)'
+                border: '1px solid rgba(0,0,0,0.05)',
+                maxHeight: '400px',
+                overflowY: 'auto'
               }}>
-                <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'var(--text-primary)' }}>
-                  Report Content Preview
-                </Typography>
-                <Typography variant="body2" color="textSecondary" paragraph>
-                  This report includes comprehensive analysis of:
-                </Typography>
-                <ul style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-                  <li>Summary statistics and key metrics</li>
-                  <li>Interactive charts and data visualizations</li>
-                  <li>Detailed incident listings with severity breakdown</li>
-                  <li>Volunteer activity logs and performance metrics</li>
-                  <li>Polling station coverage and geographic distribution</li>
-                </ul>
-              </Box>
+                <Table stickyHeader size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold', background: '#f8fafc' }}>ID</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', background: '#f8fafc' }}>Type</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', background: '#f8fafc' }}>Location</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', background: '#f8fafc' }}>Severity</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', background: '#f8fafc' }}>Status</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', background: '#f8fafc' }}>Date</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {selectedReport.data && selectedReport.data.length > 0 ? (
+                      selectedReport.data.map((item) => (
+                        <TableRow key={item.id} hover>
+                          <TableCell sx={{ fontWeight: 600, fontSize: '0.75rem' }}>{item.id}</TableCell>
+                          <TableCell sx={{ fontWeight: 500 }}>{item.type}</TableCell>
+                          <TableCell>{item.location}</TableCell>
+                          <TableCell>
+                            <Box sx={{
+                              display: 'inline-block',
+                              px: 1,
+                              py: 0.5,
+                              borderRadius: '4px',
+                              fontSize: '0.7rem',
+                              fontWeight: 800,
+                              color: '#fff',
+                              background: getSeverityColor(item.severity)
+                            }}>
+                              {item.severity}
+                            </Box>
+                          </TableCell>
+                          <TableCell>
+                            <Chip label={item.status} size="small" variant="outlined" sx={{ fontSize: '0.7rem', fontWeight: 700 }} />
+                          </TableCell>
+                          <TableCell sx={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{item.reportedOn}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
+                          <Typography color="textSecondary">No incidents found for this period.</Typography>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
           )}
         </DialogContent>
-        <DialogActions sx={{ p: 3, pt: 2 }}>
+        <DialogActions sx={{ p: 3, borderTop: '1px solid rgba(0,0,0,0.05)' }}>
           <Button
             onClick={handleCloseDialog}
+            variant="contained"
             sx={{
               borderRadius: '12px',
               px: 4,
               py: 1,
-              fontWeight: 600,
+              fontWeight: 700,
               textTransform: 'none',
               background: 'var(--gradient-primary)',
-              color: '#fff',
-              boxShadow: 'var(--shadow-md)',
-              '&:hover': {
-                background: 'var(--gradient-ocean)',
-                boxShadow: 'var(--shadow-lg)',
-              }
             }}
           >
-            Close
+            Close Report
           </Button>
         </DialogActions>
       </Dialog>

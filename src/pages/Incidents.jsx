@@ -168,11 +168,6 @@ function Incidents() {
             boxShadow: '0 8px 24px rgba(255, 107, 107, 0.4)',
             border: '1px solid rgba(255,255,255,0.3)',
             transition: 'all 0.3s ease',
-            '&:hover': {
-              background: 'linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%)',
-              transform: 'translateY(-4px)',
-              boxShadow: '0 12px 32px rgba(255, 107, 107, 0.5)',
-            }
           }}
         >
           Report Incident
@@ -224,11 +219,6 @@ function Incidents() {
                         '&:nth-of-type(odd)': {
                           background: 'rgba(102, 126, 234, 0.03)',
                         },
-                        '&:hover': {
-                          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%)',
-                          transform: 'scale(1.01)',
-                          boxShadow: '0 4px 16px rgba(102, 126, 234, 0.15)',
-                        }
                       }}
                     >
                       <TableCell sx={{ fontWeight: 600, color: 'var(--primary-600)' }}>{incident.id}</TableCell>
@@ -348,9 +338,6 @@ function Incidents() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -377,9 +364,6 @@ function Incidents() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -402,9 +386,6 @@ function Incidents() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -424,9 +405,6 @@ function Incidents() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -445,9 +423,6 @@ function Incidents() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
-                    '&:hover fieldset': {
-                      borderColor: 'var(--primary-500)',
-                    },
                     '&.Mui-focused fieldset': {
                       borderColor: 'var(--primary-600)',
                       borderWidth: '2px',
@@ -468,9 +443,6 @@ function Incidents() {
               fontWeight: 600,
               textTransform: 'none',
               color: 'var(--text-secondary)',
-              '&:hover': {
-                background: 'rgba(0,0,0,0.05)',
-              }
             }}
           >
             Cancel
@@ -486,10 +458,6 @@ function Incidents() {
               fontWeight: 'bold',
               textTransform: 'none',
               boxShadow: '0 4px 16px rgba(255, 107, 107, 0.3)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%)',
-                boxShadow: '0 6px 20px rgba(255, 107, 107, 0.4)',
-              }
             }}
           >
             Submit Report
