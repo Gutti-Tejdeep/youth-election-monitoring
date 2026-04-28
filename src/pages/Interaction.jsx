@@ -11,32 +11,38 @@ import {
   Avatar,
   ListItemAvatar,
   Grid,
-  Chip
+  Chip,
+  IconButton
 } from '@mui/material';
 import ForumIcon from '@mui/icons-material/Forum';
 import SendIcon from '@mui/icons-material/Send';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
 
 function Interaction() {
-  const { interactions, addInteraction } = useData();
+  const { interactions, addInteraction, deleteInteraction } = useData();
   const { user } = useAuth();
+  const isAdmin = (user?.role || '').toLowerCase() === 'admin';
   const [message, setMessage] = useState('');
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (!message.trim()) return;
 
     const newMsg = {
-      id: `I-${Date.now()}`,
       userEmail: user?.email || 'anonymous',
       username: user?.displayName || (user?.email ? user.email.split('@')[0] : 'Anonymous'),
       message: message.trim(),
       createdAt: new Date().toLocaleString()
     };
 
-    addInteraction(newMsg);
-    setMessage('');
+    try {
+      await addInteraction(newMsg);
+      setMessage('');
+    } catch (err) {
+      alert(err.message || 'Failed to post message');
+    }
   };
 
   return (
@@ -62,7 +68,7 @@ function Interaction() {
         <Typography
           variant="body1"
           sx={{
-            color: 'rgba(255,255,255,0.85)',
+            color: 'var(--text-primary)',
             mt: 1,
             ml: 7,
             fontWeight: 500,
@@ -80,7 +86,7 @@ function Interaction() {
             className="premium-card slide-in-up stagger-1"
             sx={{
               p: 3,
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+              background: 'rgba(15,23,42,0.6)',
             }}
           >
             <Typography
@@ -159,7 +165,7 @@ function Interaction() {
             sx={{
               p: 3,
               minHeight: 500,
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+              background: 'rgba(15,23,42,0.6)',
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
@@ -206,11 +212,18 @@ function Interaction() {
                     sx={{
                       mb: 2,
                       borderRadius: '16px',
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%)',
-                      border: '1px solid rgba(255,255,255,0.5)',
+                      background: 'linear-gradient(135deg, var(--text-primary) 0%, var(--text-disabled) 100%)',
+                      border: '1px solid var(--text-disabled)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
                       transition: 'all 0.2s ease',
                     }}
+                    secondaryAction={
+                      isAdmin ? (
+                        <IconButton edge="end" aria-label="delete" onClick={() => deleteInteraction(it.id)} sx={{ color: '#ef4444', mr: 1 }}>
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : null
+                    }
                   >
                     <ListItemAvatar sx={{ mt: 0.5 }}>
                       <Avatar sx={{

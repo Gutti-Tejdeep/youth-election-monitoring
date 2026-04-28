@@ -1,76 +1,181 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import {
+    getVolunteers, addVolunteerAPI, deleteVolunteerAPI, updateVolunteerAPI,
+    getIncidents, addIncidentAPI, deleteIncidentAPI,
+    getReports, addReportAPI, deleteReportAPI,
+    getInteractions, addInteractionAPI, deleteInteractionAPI
+} from '../services/api';
+import { useAuth } from './AuthContext';
 
 const DataContext = createContext(null);
 
 export const DataProvider = ({ children }) => {
-    // Load data from localStorage on init
-    const [volunteers, setVolunteers] = useState(() => {
-        const saved = localStorage.getItem('volunteers');
-        return saved ? JSON.parse(saved) : [];
-    });
+    const { user } = useAuth();
+    const [volunteers, setVolunteers] = useState([]);
+    const [incidents, setIncidents] = useState([]);
+    const [reports, setReports] = useState([]);
+    const [interactions, setInteractions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const [incidents, setIncidents] = useState(() => {
-        const saved = localStorage.getItem('incidents');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [reports, setReports] = useState(() => {
-        const saved = localStorage.getItem('reports');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [interactions, setInteractions] = useState(() => {
-        const saved = localStorage.getItem('interactions');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    // Save to localStorage whenever data changes
+    // ─── Fetch all data from backend only when logged in ────────────
     useEffect(() => {
-        localStorage.setItem('volunteers', JSON.stringify(volunteers));
-    }, [volunteers]);
+        if (user) {
+            fetchAllData();
+        } else {
+            setLoading(false); // Stop loading if not logged in
+        }
+    }, [user]);
 
-    useEffect(() => {
-        localStorage.setItem('incidents', JSON.stringify(incidents));
-    }, [incidents]);
-
-    useEffect(() => {
-        localStorage.setItem('reports', JSON.stringify(reports));
-    }, [reports]);
-
-    useEffect(() => {
-        localStorage.setItem('interactions', JSON.stringify(interactions));
-    }, [interactions]);
-
-    // Helper functions
-    const addVolunteer = (volunteer) => {
-        setVolunteers(prev => [...prev, volunteer]);
+    const fetchAllData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const [volRes, incRes, repRes, intRes] = await Promise.all([
+                getVolunteers(),
+                getIncidents(),
+                getReports(),
+                getInteractions()
+            ]);
+            setVolunteers(volRes.data);
+            setIncidents(incRes.data);
+            setReports(repRes.data);
+            setInteractions(intRes.data);
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            setError('Failed to load data from server');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const addIncident = (incident) => {
-        setIncidents(prev => [incident, ...prev]);
+    // ─── Volunteer operations ────────────────────────────
+    const addVolunteer = async (volunteer) => {
+        try {
+            const res = await addVolunteerAPI(volunteer);
+            setVolunteers(prev => [...prev, res.data]);
+            return res.data;
+        } catch (err) {
+            console.error('Error adding volunteer:', err);
+            throw new Error('Failed to add volunteer');
+        }
     };
 
-    const addReport = (report) => {
-        setReports(prev => [report, ...prev]);
+    const deleteVolunteer = async (id) => {
+        try {
+            await deleteVolunteerAPI(id);
+            setVolunteers(prev => prev.filter(v => v.id !== id));
+        } catch (err) {
+            console.error('Error deleting volunteer:', err);
+            throw new Error('Failed to delete volunteer');
+        }
     };
 
-    const addInteraction = (interaction) => {
-        setInteractions(prev => [interaction, ...prev]);
+    const updateVolunteer = async (id, updatedData) => {
+        try {
+            const res = await updateVolunteerAPI(id, updatedData);
+            setVolunteers(prev => prev.map(v => v.id === id ? res.data : v));
+            return res.data;
+        } catch (err) {
+            console.error('Error updating volunteer:', err);
+            throw new Error('Failed to update volunteer');
+        }
+    };
+
+    // ─── Incident operations ─────────────────────────────
+    const addIncident = async (incident) => {
+        try {
+            const res = await addIncidentAPI(incident);
+            setIncidents(prev => [res.data, ...prev]);
+            return res.data;
+        } catch (err) {
+            console.error('Error adding incident:', err);
+            throw new Error('Failed to add incident');
+        }
+    };
+
+    const deleteIncident = async (id) => {
+        try {
+            await deleteIncidentAPI(id);
+            setIncidents(prev => prev.filter(i => i.id !== id));
+        } catch (err) {
+            console.error('Error deleting incident:', err);
+            throw new Error('Failed to delete incident');
+        }
+    };
+
+    // ─── Report operations ───────────────────────────────
+    const addReport = async (report) => {
+        try {
+            const res = await addReportAPI(report);
+            setReports(prev => [res.data, ...prev]);
+            return res.data;
+        } catch (err) {
+            console.error('Error adding report:', err);
+            throw new Error('Failed to add report');
+        }
+    };
+
+    const deleteReport = async (id) => {
+        try {
+            await deleteReportAPI(id);
+            setReports(prev => prev.filter(r => r.id !== id));
+        } catch (err) {
+            console.error('Error deleting report:', err);
+            throw new Error('Failed to delete report');
+        }
+    };
+
+    // ─── Interaction operations ──────────────────────────
+    const addInteraction = async (interaction) => {
+        try {
+            const res = await addInteractionAPI(interaction);
+            setInteractions(prev => [res.data, ...prev]);
+            return res.data;
+        } catch (err) {
+            console.error('Error adding interaction:', err);
+            throw new Error('Failed to add interaction');
+        }
+    };
+
+    const deleteInteraction = async (id) => {
+        try {
+            await deleteInteractionAPI(id);
+            setInteractions(prev => prev.filter(i => i.id !== id));
+        } catch (err) {
+            console.error('Error deleting interaction:', err);
+            throw new Error('Failed to delete interaction');
+        }
     };
 
     const value = {
+        // Data
         volunteers,
+        incidents,
+        reports,
+        interactions,
+        // Status
+        loading,
+        error,
+        // Volunteer ops
         setVolunteers,
         addVolunteer,
-        incidents,
+        deleteVolunteer,
+        updateVolunteer,
+        // Incident ops
         setIncidents,
         addIncident,
-        reports,
+        deleteIncident,
+        // Report ops
         setReports,
         addReport,
-        interactions,
+        deleteReport,
+        // Interaction ops
         setInteractions,
-        addInteraction
+        addInteraction,
+        deleteInteraction,
+        // Refresh
+        fetchAllData
     };
 
     return (

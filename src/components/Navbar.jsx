@@ -49,12 +49,12 @@ function Navbar({ toggleSidebar }) {
       position="fixed"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)',
+        background: 'linear-gradient(135deg, var(--border-light) 0%, var(--bg-glass) 100%)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
-        color: '#fff',
+        borderBottom: '1px solid var(--text-disabled)',
+        color: 'var(--text-primary)',
         width: 'calc(100% - 32px)',
         left: '16px',
         top: '16px',
@@ -71,9 +71,9 @@ function Navbar({ toggleSidebar }) {
           edge="start"
           sx={{
             mr: 1,
-            background: 'rgba(255, 255, 255, 0.15)',
+            background: 'var(--bg-glass)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            border: '1px solid var(--border-light)',
             transition: 'all 0.3s ease',
           }}
         >
@@ -83,7 +83,7 @@ function Navbar({ toggleSidebar }) {
         {/* App Title */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexGrow: 1 }}>
           <Box sx={{ cursor: 'pointer' }} onClick={() => navigate('/home')}>
-            <Logo size={48} color1="#ffffff" color2="rgba(255,255,255,0.7)" />
+            <Logo size={48} color1="var(--text-primary)fff" color2="var(--text-secondary)" />
           </Box>
           <Typography
             variant="h5"
@@ -93,7 +93,7 @@ function Navbar({ toggleSidebar }) {
               fontWeight: 800,
               letterSpacing: '1px',
               fontFamily: "'Outfit', sans-serif",
-              background: 'linear-gradient(135deg, #fff 0%, #e2e8f0 100%)',
+              background: 'linear-gradient(135deg, var(--text-primary) 0%, #e2e8f0 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -106,13 +106,13 @@ function Navbar({ toggleSidebar }) {
 
         {/* Election Status Chip */}
         <Chip
-          icon={<HowToVoteIcon sx={{ color: '#fff !important', fontSize: '1rem' }} />}
+          icon={<HowToVoteIcon sx={{ color: 'var(--text-primary) !important', fontSize: '1rem' }} />}
           label={status.label}
           size="small"
           sx={{
             background: `${status.color}33`,
             border: `1px solid ${status.color}88`,
-            color: '#fff',
+            color: 'var(--text-primary)',
             fontWeight: 700,
             fontSize: '0.78rem',
             px: 0.5,
@@ -133,14 +133,14 @@ function Navbar({ toggleSidebar }) {
               }}
               onBlur={() => setShowDatePicker(false)}
               autoFocus
-              inputProps={{ style: { color: '#fff', fontSize: '0.85rem' } }}
+              inputProps={{ style: { color: 'var(--text-primary)', fontSize: '0.85rem' } }}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  background: 'rgba(255,255,255,0.15)',
+                  background: 'var(--bg-glass)',
                   borderRadius: '12px',
-                  color: '#fff',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.4)' },
-                  '&.Mui-focused fieldset': { borderColor: '#fff' },
+                  color: 'var(--text-primary)',
+                  '& fieldset': { borderColor: 'var(--text-disabled)' },
+                  '&.Mui-focused fieldset': { borderColor: 'var(--text-primary)' },
                 },
                 '& input[type="date"]::-webkit-calendar-picker-indicator': {
                   filter: 'invert(1)',
@@ -156,10 +156,10 @@ function Navbar({ toggleSidebar }) {
                 size="small"
                 sx={{
                   borderRadius: '14px',
-                  background: 'rgba(255, 255, 255, 0.15)',
+                  background: 'var(--bg-glass)',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.35)',
-                  color: '#fff',
+                  color: 'var(--text-primary)',
                   fontWeight: 600,
                   fontSize: '0.82rem',
                   textTransform: 'none',
@@ -182,10 +182,10 @@ function Navbar({ toggleSidebar }) {
               label={user.role}
               size="small"
               sx={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                color: '#fff',
+                background: 'var(--border-light)',
+                color: 'var(--text-primary)',
                 fontWeight: 600,
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                border: '1px solid var(--border-light)',
                 backdropFilter: 'blur(10px)',
                 px: 1
               }}
@@ -202,7 +202,7 @@ function Navbar({ toggleSidebar }) {
             borderRadius: '16px',
             background: 'linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(238, 90, 111, 0.9) 100%)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.4)',
+            border: '1px solid var(--text-disabled)',
             px: 2.5,
             py: 1,
             fontWeight: 'bold',

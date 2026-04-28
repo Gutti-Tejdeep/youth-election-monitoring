@@ -17,6 +17,8 @@ import ForumIcon from '@mui/icons-material/Forum';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import PollIcon from '@mui/icons-material/Poll';
+import CalculateIcon from '@mui/icons-material/Calculate';
 
 function Home() {
   const navigate = useNavigate();
@@ -26,50 +28,54 @@ function Home() {
     'Admin': {
       title: "Admin Control Center",
       description: "Manage the system, monitor election data, and ensure platform security.",
-      gradient: "linear-gradient(135deg, #4b6cb7 0%, #182848 100%)",
-      mainIcon: <AdminPanelSettingsIcon sx={{ fontSize: 100, color: '#fff' }} />,
+      gradient: "linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)",
+      mainIcon: <AdminPanelSettingsIcon sx={{ fontSize: 100, color: 'var(--text-primary)' }} />,
       features: [
-        { icon: <GroupIcon sx={{ color: '#4facfe' }} />, title: "User Management", desc: "Manage roles and permissions for all platform users." },
-        { icon: <SecurityIcon sx={{ color: '#ff6b6b' }} />, title: "Platform Security", desc: "Monitor system logs and ensure data integrity." },
-        { icon: <DashboardIcon sx={{ color: '#43e97b' }} />, title: "System Overview", desc: "Global monitoring of election platform health." }
+        { icon: <GroupIcon sx={{ color: '#60a5fa' }} />, title: "User Management", desc: "Manage roles and permissions for all platform users." },
+        { icon: <SecurityIcon sx={{ color: '#f87171' }} />, title: "Platform Security", desc: "Monitor system logs and ensure data integrity." },
+        { icon: <DashboardIcon sx={{ color: '#4ade80' }} />, title: "System Overview", desc: "Global monitoring of election platform health." }
       ],
-      primaryAction: { label: "System Config", path: "/dashboard" }
+      primaryAction: { label: "System Config", path: "/dashboard" },
+      secondaryAction: { label: "Manage Users", path: "/volunteers" }
     },
     'Citizen': {
       title: "Citizen Participation Portal",
       description: "Track election processes, report issues, and engage in civic discussions.",
-      gradient: "linear-gradient(135deg, #00b09b 0%, #96c93d 100%)",
-      mainIcon: <PublicIcon sx={{ fontSize: 100, color: '#fff' }} />,
+      gradient: "linear-gradient(135deg, #0f766e 0%, #064e3b 100%)",
+      mainIcon: <PublicIcon sx={{ fontSize: 100, color: 'var(--text-primary)' }} />,
       features: [
-        { icon: <AssignmentLateIcon sx={{ color: '#fa709a' }} />, title: "Report Issues", desc: "Quickly report incidents seen at polling stations." },
-        { icon: <ForumIcon sx={{ color: '#4facfe' }} />, title: "Civic Discussion", desc: "Engage with other citizens in our secure forums." },
-        { icon: <HowToVoteIcon sx={{ color: '#43e97b' }} />, title: "Process Tracking", desc: "Follow election updates in your local area." }
+        { icon: <AssignmentLateIcon sx={{ color: '#fb923c' }} />, title: "Report Issues", desc: "Quickly report incidents seen at polling stations." },
+        { icon: <ForumIcon sx={{ color: '#60a5fa' }} />, title: "Civic Discussion", desc: "Engage with other citizens in our secure forums." },
+        { icon: <HowToVoteIcon sx={{ color: '#a78bfa' }} />, title: "Process Tracking", desc: "Follow election updates in your local area." }
       ],
-      primaryAction: { label: "Report Incident", path: "/incidents" }
+      primaryAction: { label: "Report Incident", path: "/incidents" },
+      secondaryAction: { label: "Discussions", path: "/interaction" }
     },
     'Election Observer': {
       title: "Election Observation Hub",
-      description: "Monitor election activities, report anomalies, and provide insights on fairness and transparency.",
-      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      mainIcon: <VisibilityIcon sx={{ fontSize: 100, color: '#fff' }} />,
+      description: "Monitor election activities, report anomalies, conduct polls, and provide insights on fairness.",
+      gradient: "linear-gradient(135deg, #7e22ce 0%, #4c1d95 100%)",
+      mainIcon: <VisibilityIcon sx={{ fontSize: 100, color: 'var(--text-primary)' }} />,
       features: [
-        { icon: <FactCheckIcon sx={{ color: '#fddb92' }} />, title: "Anomaly Tracking", desc: "Log and verify irregularities in the voting process." },
-        { icon: <VisibilityIcon sx={{ color: '#4facfe' }} />, title: "Transparency Audit", desc: "Review real-time data for fairness indicators." },
-        { icon: <AssessmentIcon sx={{ color: '#43e97b' }} />, title: "Observer Insights", desc: "Provide expert commentary on polling activities." }
+        { icon: <FactCheckIcon sx={{ color: '#fde047' }} />, title: "Anomaly Tracking", desc: "Log and verify irregularities in the voting process." },
+        { icon: <PollIcon sx={{ color: '#38bdf8' }} />, title: "Conduct Poll", desc: "Initiate local flash polls to sample voter sentiment." },
+        { icon: <AssessmentIcon sx={{ color: '#4ade80' }} />, title: "Observer Insights", desc: "Provide expert commentary on polling activities." }
       ],
-      primaryAction: { label: "Begin Monitoring", path: "/dashboard" }
+      primaryAction: { label: "Begin Monitoring", path: "/dashboard" },
+      secondaryAction: { label: "Conduct Poll", path: "/dashboard" }
     },
     'Data Analyst': {
       title: "Analytical Insights Dashboard",
-      description: "Analyze election data, generate reports, and provide real-time updates.",
-      gradient: "linear-gradient(135deg, #21d4fd 0%, #b721ff 100%)",
-      mainIcon: <AnalyticsIcon sx={{ fontSize: 100, color: '#fff' }} />,
+      description: "Analyze election data, calculate trends, generate reports, and provide real-time updates.",
+      gradient: "linear-gradient(135deg, #0369a1 0%, #082f49 100%)",
+      mainIcon: <AnalyticsIcon sx={{ fontSize: 100, color: 'var(--text-primary)' }} />,
       features: [
-        { icon: <BarChartIcon sx={{ color: '#fddb92' }} />, title: "Data Visualization", desc: "Analyze trends with advanced charting tools." },
-        { icon: <AssessmentIcon sx={{ color: '#43e97b' }} />, title: "Report Generation", desc: "Create comprehensive PDF reports for stakeholders." },
-        { icon: <AnalyticsIcon sx={{ color: '#4facfe' }} />, title: "Real-time Updates", desc: "Monitor incoming data feeds for instant analysis." }
+        { icon: <CalculateIcon sx={{ color: '#fde047' }} />, title: "Show Analysis", desc: "Calculate predictive data and demographic turnouts." },
+        { icon: <BarChartIcon sx={{ color: '#38bdf8' }} />, title: "Data Visualization", desc: "Analyze trends with advanced charting tools." },
+        { icon: <AssessmentIcon sx={{ color: '#4ade80' }} />, title: "Report Generation", desc: "Create comprehensive PDF reports for stakeholders." }
       ],
-      primaryAction: { label: "View Analytics", path: "/reports" }
+      primaryAction: { label: "Calculate Data", path: "/dashboard" },
+      secondaryAction: { label: "View Reports", path: "/reports" }
     }
   };
 
@@ -121,7 +127,7 @@ function Home() {
               borderRadius: '32px',
               background: currentConfig.gradient,
               boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid var(--border-light)'
             }}
           >
             {currentConfig.mainIcon}
@@ -144,25 +150,54 @@ function Home() {
             {currentConfig.description}
           </Typography>
 
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => navigate(currentConfig.primaryAction.path)}
-            startIcon={<DashboardIcon />}
-            className="slide-in-up stagger-2"
-            sx={{
-              px: 6,
-              py: 2,
-              fontSize: '1.2rem',
-              fontWeight: 'bold',
-              borderRadius: '50px',
-              background: currentConfig.gradient,
-              boxShadow: 'var(--shadow-lg)',
-              textTransform: 'none',
-            }}
-          >
-            {currentConfig.primaryAction.label}
-          </Button>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate(currentConfig.primaryAction.path)}
+              startIcon={<DashboardIcon />}
+              className="slide-in-up stagger-2"
+              sx={{
+                px: 5,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                borderRadius: '50px',
+                background: currentConfig.gradient,
+                boxShadow: 'var(--shadow-lg)',
+                textTransform: 'none',
+              }}
+            >
+              {currentConfig.primaryAction.label}
+            </Button>
+
+            {currentConfig.secondaryAction && (
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={() => navigate(currentConfig.secondaryAction.path)}
+                className="slide-in-up stagger-2"
+                sx={{
+                  px: 5,
+                  py: 1.5,
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  borderRadius: '50px',
+                  color: 'var(--text-primary)',
+                  borderColor: 'var(--border-light)',
+                  background: 'var(--bg-glass-light)',
+                  backdropFilter: 'blur(10px)',
+                  textTransform: 'none',
+                  '&:hover': {
+                    background: 'var(--bg-glass)',
+                    borderColor: 'var(--text-disabled)',
+                  }
+                }}
+              >
+                {currentConfig.secondaryAction.label}
+              </Button>
+            )}
+          </Box>
         </Container>
       </Box>
 
@@ -177,13 +212,13 @@ function Home() {
                   p: 4,
                   height: '100%',
                   textAlign: 'center',
-                  background: 'rgba(255,255,255,0.8)',
+                  background: 'rgba(15,23,42,0.85)',
                   backdropFilter: 'blur(20px)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   borderRadius: '24px',
-                  border: '1px solid rgba(255,255,255,0.3)',
+                  border: '1px solid var(--bg-glass-heavy)',
                   transition: 'all 0.4s ease',
                 }}
               >

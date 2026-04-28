@@ -11,10 +11,83 @@ import Volunteers from './pages/Volunteers';
 import Incidents from './pages/Incidents';
 import LoginPage from './pages/LoginPage';
 import Interaction from './pages/Interaction';
+import Profile from './pages/Profile';
 
 // Component Imports
 import Layout from './components/Layout';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, ThemeProvider, createTheme } from '@mui/material';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#3b82f6',
+      light: '#60a5fa',
+      dark: '#2563eb',
+    },
+    background: {
+      default: '#0B0F19',
+      paper: '#111827',
+    },
+    text: {
+      primary: '#FFFFFF',
+      secondary: '#9CA3AF',
+      disabled: '#6B7280',
+    },
+    divider: 'rgba(255,255,255,0.12)',
+  },
+  typography: {
+    fontFamily: "'Outfit', 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          backgroundColor: '#111827',
+          border: '1px solid rgba(255,255,255,0.08)',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontWeight: 600,
+          borderRadius: '8px',
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(255,255,255,0.03)',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(255,255,255,0.2)',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(255,255,255,0.4)',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#3b82f6',
+            borderWidth: '2px',
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#9CA3AF',
+          fontWeight: 500,
+          '&.Mui-focused': {
+            color: '#60a5fa',
+          },
+        },
+      },
+    },
+  },
+});
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -54,6 +127,7 @@ function AppContent() {
           <Route path="interaction" element={<Interaction />} />
           <Route path="volunteers" element={<Volunteers />} />
           <Route path="incidents" element={<Incidents />} />
+          <Route path="profile" element={<Profile />} />
 
           {/* Default Route: Redirect root path to /home */}
           <Route index element={<Navigate to="/home" replace />} />
@@ -66,11 +140,13 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <DataProvider>
-        <AppContent />
-      </DataProvider>
-    </AuthProvider>
+    <ThemeProvider theme={darkTheme}>
+      <AuthProvider>
+        <DataProvider>
+          <AppContent />
+        </DataProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

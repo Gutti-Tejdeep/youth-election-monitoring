@@ -21,17 +21,21 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 
 function Reports() {
-  const { reports, addReport, incidents } = useData();
+  const { reports, addReport, deleteReport, incidents } = useData();
+  const { user } = useAuth();
+  const isAdmin = (user?.role || '').toLowerCase() === 'admin';
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
   const [reportType, setReportType] = useState('Summary');
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
 
-  const handleGenerateReport = () => {
+  const handleGenerateReport = async () => {
     if (!dateStart || !dateEnd) {
       alert('Please select both start and end dates');
       return;
@@ -60,7 +64,6 @@ function Reports() {
 
     // Create a new report
     const newReport = {
-      id: `RPT-${Date.now()}`,
       type: reportType,
       dateRange: `${dateStart} to ${dateEnd}`,
       generatedOn: new Date().toLocaleString(),
@@ -69,10 +72,14 @@ function Reports() {
       stats: stats
     };
 
-    addReport(newReport);
-    setSelectedReport(newReport);
-    setViewDialogOpen(true);
-    alert('Report generated successfully! Previewing summary...');
+    try {
+      const savedReport = await addReport(newReport);
+      setSelectedReport(savedReport || newReport);
+      setViewDialogOpen(true);
+      alert('Report generated successfully! Previewing summary...');
+    } catch (err) {
+      alert(err.message || 'Failed to generate report');
+    }
   };
 
   const handleViewReport = (report) => {
@@ -117,7 +124,7 @@ function Reports() {
         <Typography
           variant="body1"
           sx={{
-            color: 'rgba(255,255,255,0.85)',
+            color: 'var(--text-primary)',
             mt: 1,
             ml: 7,
             fontWeight: 500,
@@ -133,7 +140,7 @@ function Reports() {
         sx={{
           p: 4,
           mb: 4,
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+          background: 'rgba(15,23,42,0.6)',
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
@@ -237,13 +244,13 @@ function Reports() {
               sx={{
                 height: '56px',
                 background: 'var(--gradient-primary)',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 borderRadius: '12px',
                 fontWeight: 'bold',
                 fontSize: '1rem',
                 textTransform: 'none',
                 boxShadow: 'var(--shadow-lg)',
-                border: '1px solid rgba(255,255,255,0.3)',
+                border: '1px solid var(--border-light)',
                 transition: 'all 0.3s ease',
               }}
             >
@@ -258,7 +265,7 @@ function Reports() {
         className="premium-card slide-in-up stagger-2"
         sx={{
           p: 4,
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+          background: 'rgba(15,23,42,0.6)',
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
@@ -344,6 +351,25 @@ function Reports() {
                         >
                           View Details
                         </Button>
+                        {isAdmin && (
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              startIcon={<DeleteIcon />}
+                              onClick={() => deleteReport(report.id)}
+                              sx={{
+                                borderRadius: '10px',
+                                borderColor: 'var(--error-500)',
+                                color: '#ef4444',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                px: 2,
+                                ml: 1
+                              }}
+                            >
+                              Delete
+                            </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -379,7 +405,7 @@ function Reports() {
         PaperProps={{
           sx: {
             borderRadius: '24px',
-            background: '#fff',
+            background: 'var(--text-primary)',
             boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
             maxHeight: '90vh'
           }
@@ -479,7 +505,7 @@ function Reports() {
                               borderRadius: '4px',
                               fontSize: '0.7rem',
                               fontWeight: 800,
-                              color: '#fff',
+                              color: 'var(--text-primary)',
                               background: getSeverityColor(item.severity)
                             }}>
                               {item.severity}

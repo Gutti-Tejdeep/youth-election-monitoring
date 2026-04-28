@@ -17,14 +17,19 @@ import {
   TableHead,
   TableRow,
   Chip,
-  MenuItem
+  MenuItem,
+  IconButton
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import WarningIcon from '@mui/icons-material/Warning';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 
 function Incidents() {
-  const { incidents, addIncident } = useData();
+  const { incidents, addIncident, deleteIncident } = useData();
+  const { user } = useAuth();
+  const isAdmin = (user?.role || '').toLowerCase() === 'admin';
   const [dialogOpen, setDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     type: '',
@@ -67,14 +72,13 @@ function Incidents() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.type || !formData.location || !formData.description || !formData.reporterName) {
       alert('Please fill in all required fields');
       return;
     }
 
     const newIncident = {
-      id: `INC-${Date.now()}`,
       type: formData.type,
       location: formData.location,
       description: formData.description,
@@ -85,9 +89,13 @@ function Incidents() {
       severity: getSeverity(formData.type)
     };
 
-    addIncident(newIncident);
-    handleCloseDialog();
-    alert('Incident reported successfully!');
+    try {
+      await addIncident(newIncident);
+      handleCloseDialog();
+      alert('Incident reported successfully!');
+    } catch (err) {
+      alert(err.message || 'Failed to report incident');
+    }
   };
 
   const getSeverity = (type) => {
@@ -125,7 +133,7 @@ function Incidents() {
             variant="h3"
             sx={{
               fontWeight: 'bold',
-              background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%)',
+              background: 'linear-gradient(135deg, var(--text-primary) 0%, rgba(255,255,255,0.9) 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -141,7 +149,7 @@ function Incidents() {
           <Typography
             variant="body1"
             sx={{
-              color: 'rgba(255,255,255,0.85)',
+              color: 'var(--text-primary)',
               mt: 1,
               ml: 7,
               fontWeight: 500,
@@ -158,7 +166,7 @@ function Incidents() {
           onClick={handleOpenDialog}
           sx={{
             background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
-            color: '#fff',
+            color: 'var(--text-primary)',
             px: 4,
             py: 1.5,
             borderRadius: '16px',
@@ -166,7 +174,7 @@ function Incidents() {
             fontSize: '1rem',
             textTransform: 'none',
             boxShadow: '0 8px 24px rgba(255, 107, 107, 0.4)',
-            border: '1px solid rgba(255,255,255,0.3)',
+            border: '1px solid var(--border-light)',
             transition: 'all 0.3s ease',
           }}
         >
@@ -178,7 +186,7 @@ function Incidents() {
         className="premium-card slide-in-up stagger-2"
         sx={{
           p: 4,
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
+          background: 'rgba(15,23,42,0.6)',
         }}
       >
         {incidents.length === 0 ? (
@@ -207,6 +215,7 @@ function Incidents() {
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Severity</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Status</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Reported On</TableCell>
+                    {isAdmin && <TableCell sx={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--text-primary)', textAlign: 'center' }}>Action</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -246,11 +255,11 @@ function Incidents() {
                           className="pulse"
                           sx={{
                             background: getSeverityGradient(incident.severity),
-                            color: '#fff',
+                            color: 'var(--text-primary)',
                             fontWeight: 'bold',
                             px: 1.5,
                             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                            border: '1px solid rgba(255,255,255,0.3)',
+                            border: '1px solid var(--border-light)',
                           }}
                         />
                       </TableCell>
@@ -268,6 +277,13 @@ function Incidents() {
                       <TableCell sx={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                         {incident.reportedOn}
                       </TableCell>
+                      {isAdmin && (
+                        <TableCell align="center">
+                          <IconButton onClick={() => deleteIncident(incident.id)} sx={{ color: '#ef4444' }}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -301,7 +317,7 @@ function Incidents() {
         PaperProps={{
           sx: {
             borderRadius: '24px',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)',
+            background: 'linear-gradient(135deg, rgba(18, 15, 15, 0.98) 0%, rgba(10, 10, 10, 0.95) 100%)',
             backdropFilter: 'blur(20px)',
             boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
           }

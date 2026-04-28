@@ -18,6 +18,7 @@ const navItems = [
   { text: 'Interaction', icon: ForumIcon, path: '/interaction' },
   { text: 'Volunteers', icon: GroupIcon, path: '/volunteers' },
   { text: 'Incidents', icon: WarningIcon, path: '/incidents' },
+  { text: 'Profile', icon: GroupIcon, path: '/profile' },
 ];
 
 function Sidebar({ isOpen, handleDrawerToggle }) {
@@ -34,23 +35,27 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
   // Filter nav items based on role
   const filteredNavItems = navItems.filter(item => {
     if (!user) return false;
-    const role = user.role;
+    const role = (user.role || 'citizen').toLowerCase();
 
-    if (role === 'Admin') return true;
+    if (role === 'admin') return true;
 
-    if (role === 'Citizen') {
-      return ['Home', 'Interaction', 'Incidents'].includes(item.text);
+    if (role === 'citizen') {
+      return ['Home', 'Dashboard', 'Reports', 'Interaction', 'Incidents', 'Profile'].includes(item.text);
     }
 
-    if (role === 'Election Observer') {
-      return ['Home', 'Dashboard', 'Reports', 'Incidents', 'Interaction'].includes(item.text);
+    if (role === 'election observer') {
+      return ['Home', 'Dashboard', 'Reports', 'Incidents', 'Interaction', 'Profile'].includes(item.text);
     }
 
-    if (role === 'Data Analyst') {
-      return ['Home', 'Dashboard', 'Reports'].includes(item.text);
+    if (role === 'data analyst') {
+      return ['Home', 'Dashboard', 'Reports', 'Profile'].includes(item.text);
     }
 
-    return ['Home'].includes(item.text);
+    if (role === 'volunteer') {
+      return ['Home', 'Dashboard', 'Reports', 'Interaction', 'Incidents', 'Profile', 'Volunteers'].includes(item.text);
+    }
+
+    return ['Home', 'Profile'].includes(item.text);
   });
 
   // Horizontal nav content
@@ -75,7 +80,7 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
           onClick={handleItemClick}
           sx={{
             borderRadius: '12px',
-            color: 'rgba(255, 255, 255, 0.8)',
+            color: 'var(--text-primary)',
             px: 2,
             py: 1,
             minWidth: 'auto',
@@ -83,16 +88,16 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
             gap: 1,
             transition: 'all 0.3s ease',
             '&.active': {
-              background: 'rgba(255, 255, 255, 0.25)',
-              color: '#fff',
+              background: 'var(--border-light)',
+              color: 'var(--text-primary)',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               '& .MuiListItemIcon-root': {
-                color: '#fff',
+                color: 'var(--text-primary)',
               },
             },
           }}
         >
-          <ListItemIcon sx={{ color: 'rgba(255, 255, 255, 0.8)', minWidth: 'auto' }}>
+          <ListItemIcon sx={{ color: 'var(--text-primary)', minWidth: 'auto' }}>
             <item.icon sx={{ fontSize: 20 }} />
           </ListItemIcon>
           <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '0.85rem' }}>
@@ -115,11 +120,11 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
           left: '16px',
           right: '16px',
           zIndex: (theme) => theme.zIndex.drawer,
-          background: 'rgba(255, 255, 255, 0.1)',
+          background: 'var(--bg-glass-heavy)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: '16px',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid var(--border-light)',
           boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
         }}
       >
@@ -137,9 +142,9 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
             width: 250,
-            background: 'rgba(255, 255, 255, 0.15)',
+            background: 'var(--bg-glass)',
             backdropFilter: 'blur(20px)',
-            borderRight: '1px solid rgba(255, 255, 255, 0.2)',
+            borderRight: '1px solid var(--border-light)',
           },
         }}
       >
@@ -153,19 +158,19 @@ function Sidebar({ isOpen, handleDrawerToggle }) {
                   onClick={handleItemClick}
                   sx={{
                     borderRadius: '12px',
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    color: 'var(--text-primary)',
                     transition: 'all 0.3s ease',
                     '&.active': {
-                      background: 'rgba(255, 255, 255, 0.25)',
-                      color: '#fff',
+                      background: 'var(--border-light)',
+                      color: 'var(--text-primary)',
                       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                       '& .MuiListItemIcon-root': {
-                        color: '#fff',
+                        color: 'var(--text-primary)',
                       },
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ color: 'rgba(255, 255, 255, 0.8)', minWidth: 40 }}>
+                  <ListItemIcon sx={{ color: 'var(--text-primary)', minWidth: 40 }}>
                     <item.icon />
                   </ListItemIcon>
                   <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: 500 }} />

@@ -23,7 +23,7 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
       display: 'flex',
       alignItems: 'center',
       background: gradient,
-      color: '#fff',
+      color: 'var(--text-primary)',
       position: 'relative',
       overflow: 'hidden',
       cursor: 'pointer',
@@ -48,7 +48,7 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
             fontWeight: 700,
             letterSpacing: '1px',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.85)',
+            color: 'var(--text-primary)',
             mb: 0.5
           }}
         >
@@ -59,7 +59,7 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
           component="div"
           sx={{
             fontWeight: 'bold',
-            color: '#fff',
+            color: 'var(--text-primary)',
             lineHeight: 1,
             mb: 0.5,
             textShadow: '0 2px 10px rgba(0,0,0,0.2)'
@@ -68,7 +68,7 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
           {value}
         </Typography>
         {subtitle && (
-          <Typography sx={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.75)', fontWeight: 500 }}>
+          <Typography sx={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
             {subtitle}
           </Typography>
         )}
@@ -76,7 +76,7 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
 
       {/* Icon in a glassy circle — fully visible */}
       <Box sx={{
-        background: 'rgba(255,255,255,0.2)',
+        background: 'var(--border-light)',
         borderRadius: '50%',
         width: 72,
         height: 72,
@@ -88,7 +88,7 @@ const MetricCard = ({ title, value, icon: IconComponent, gradient, delay = 0, su
         boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
         flexShrink: 0,
       }}>
-        <IconComponent sx={{ fontSize: 38, color: '#fff' }} />
+        <IconComponent sx={{ fontSize: 38, color: 'var(--text-primary)' }} />
       </Box>
     </CardContent>
   </Card>
@@ -102,7 +102,7 @@ const SeverityCard = ({ severity, count, gradient, icon: IconComp, delay = 0 }) 
       p: 3,
       textAlign: 'center',
       background: gradient,
-      color: '#fff',
+      color: 'var(--text-primary)',
       borderRadius: '20px',
       position: 'relative',
       overflow: 'hidden',
@@ -112,7 +112,7 @@ const SeverityCard = ({ severity, count, gradient, icon: IconComp, delay = 0 }) 
         position: 'absolute',
         top: 0, left: 0, right: 0,
         height: '2px',
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+        background: 'linear-gradient(90deg, transparent, var(--text-primary), transparent)',
       },
     }}
   >
@@ -178,7 +178,7 @@ function Dashboard() {
           className="slide-in-right"
           sx={{
             fontWeight: 'bold',
-            background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%)',
+            background: 'linear-gradient(135deg, var(--text-primary) 0%, rgba(255,255,255,0.9) 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -188,14 +188,14 @@ function Dashboard() {
             gap: 2
           }}
         >
-          <HowToVoteIcon sx={{ fontSize: '2.5rem', color: '#fff', WebkitTextFillColor: '#fff' }} />
+          <HowToVoteIcon sx={{ fontSize: '2.5rem', color: 'var(--text-primary)', WebkitTextFillColor: 'var(--text-primary)' }} />
           {user?.role} Dashboard
         </Typography>
         <Typography
           variant="body1"
           className="slide-in-right stagger-1"
           sx={{
-            color: 'rgba(255,255,255,0.85)',
+            color: 'var(--text-primary)',
             fontSize: '1.05rem',
             fontWeight: 500,
             mt: 0.5,
@@ -262,7 +262,7 @@ function Dashboard() {
             sx={{
               p: 4,
               minHeight: 480,
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%)',
+              background: 'rgba(15,23,42,0.6)',
               borderRadius: '24px',
             }}
           >
@@ -276,7 +276,7 @@ function Dashboard() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                <TrendingUpIcon sx={{ color: '#fff', fontSize: 24 }} />
+                <TrendingUpIcon sx={{ color: 'var(--text-primary)', fontSize: 24 }} />
               </Box>
               <Typography
                 variant="h5"
@@ -340,7 +340,7 @@ function Dashboard() {
                     gutterBottom
                     sx={{
                       fontWeight: 700,
-                      color: '#333',
+                      color: '#e2e8f0',
                       mb: 2,
                       display: 'flex',
                       alignItems: 'center',
@@ -382,7 +382,7 @@ function Dashboard() {
                         </Avatar>
                         <ListItemText
                           primary={
-                            <Typography variant="body2" sx={{ fontWeight: 600, color: '#222' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#e2e8f0' }}>
                               {incident.type} — {incident.location}
                             </Typography>
                           }
@@ -401,7 +401,7 @@ function Dashboard() {
                               : incident.severity === 'Medium'
                                 ? 'linear-gradient(135deg, #ffa726 0%, #fb8c00 100%)'
                                 : 'linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%)',
-                            color: '#fff',
+                            color: 'var(--text-primary)',
                             fontWeight: 'bold',
                             px: 1,
                             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
@@ -424,7 +424,7 @@ function Dashboard() {
               p: 4,
               minHeight: 480,
               overflowY: 'auto',
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%)',
+              background: 'rgba(15,23,42,0.6)',
               borderRadius: '24px',
             }}
           >
@@ -438,7 +438,7 @@ function Dashboard() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-                <TrendingUpIcon sx={{ color: '#fff', fontSize: 24 }} />
+                <TrendingUpIcon sx={{ color: 'var(--text-primary)', fontSize: 24 }} />
               </Box>
               <Typography
                 variant="h5"
@@ -482,7 +482,7 @@ function Dashboard() {
                     <Box sx={{ mr: 1.5 }}>{activityIcon(activity.type)}</Box>
                     <ListItemText
                       primary={
-                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#222', fontSize: '0.82rem' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#e2e8f0', fontSize: '0.82rem' }}>
                           {activity.text}
                         </Typography>
                       }
@@ -502,7 +502,7 @@ function Dashboard() {
                             : activity.severity === 'Medium'
                               ? 'linear-gradient(135deg, #ffa726 0%, #fb8c00 100%)'
                               : 'linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%)',
-                          color: '#fff',
+                          color: 'var(--text-primary)',
                           fontWeight: 'bold',
                           fontSize: '0.68rem',
                           boxShadow: '0 2px 8px rgba(0,0,0,0.12)',

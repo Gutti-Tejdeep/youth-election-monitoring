@@ -1,96 +1,136 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { loginUser, registerUser, verifyOtpAPI } from '../services/api';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [credentials, setCredentials] = useState([]);
 
-    // --- MOCK AUTH BYPASS FLAG ---
-    // Set this to true to immediately bypass the login screen for testing.
-    // KEEP THIS SET TO 'true' to run without Firebase.
-    const MOCK_AUTH_ENABLED = false;
-
-    // Load credentials from localStorage on mount
+    // On mount (optional: check session later if using JWT)
     useEffect(() => {
-        const savedCredentials = localStorage.getItem('userCredentials');
-        if (savedCredentials) {
-            try {
-                setCredentials(JSON.parse(savedCredentials));
-            } catch (error) {
-                console.error('Error loading credentials:', error);
-            }
-        }
-
-        // 1. MOCK AUTHENTICATION LOGIC
-        if (MOCK_AUTH_ENABLED) {
-            setUser({ uid: 'mock-user-id', email: 'tester@example.com' });
-        }
         setLoading(false);
     }, []);
 
-    // Save credentials to localStorage whenever they change
-    useEffect(() => {
-        localStorage.setItem('userCredentials', JSON.stringify(credentials));
-    }, [credentials]);
+    // 🔐 LOGIN (Backend API or Local Bypass)
+    const login = async (identifier, password, loginRole = "Citizen") => {
+        try {
+            // Local fallback for special roles requested by user
+            if (loginRole === 'Admin') {
+                if (password === 'admin') {
+                    const adminUser = { email: 'admin@system.com', displayName: 'Administrator', role: 'Admin' };
+                    setUser(adminUser);
+                    return adminUser;
+                }
+                throw new Error("Invalid admin password");
+            }
 
-    const login = (email, password, role) => {
-        // Validate credentials exist and match
-        const credential = credentials.find(cred => cred.email === email && cred.password === password);
+            if (loginRole === 'Election Observer') {
+                if (password === 'observer') {
+                    const obsUser = { email: 'observer@system.com', displayName: 'Lead Observer', role: 'Election Observer' };
+                    setUser(obsUser);
+                    return obsUser;
+                }
+                throw new Error("Invalid observer password");
+            }
 
-        if (!credential) {
-            throw new Error('Invalid email or password. Please register first.');
+            if (loginRole === 'Data Analyst') {
+                if (password === 'analyst') {
+                    const anaUser = { email: 'analyst@system.com', displayName: 'Lead Analyst', role: 'Data Analyst' };
+                    setUser(anaUser);
+                    return anaUser;
+                }
+                throw new Error("Invalid analyst password");
+            }
+
+            // Normal citizen route hitting the backend
+            const res = await loginUser({
+                email: identifier,
+                password
+            });
+
+            setUser(res.data); // backend user object
+            return res.data;
+
+        } catch (err) {
+            console.error(err);
+            let detailedError = err.message || "Invalid credentials";
+            if (err.response?.data) {
+                if (typeof err.response.data === 'string') {
+                    detailedError = err.response.data;
+                } else if (err.response.data.message) {
+                    detailedError = err.response.data.message;
+                } else if (err.response.data.error) {
+                    detailedError = err.response.data.error;
+                }
+            }
+            throw new Error(detailedError);
         }
-
-        // If a role is specified, verify it matches (optional, usually users have fixed roles)
-        // For this mock app, we'll allow selection during login if not fixed
-        const assignedRole = role || credential.role || 'Citizen';
-
-        // Create new user
-        const newUser = {
-            uid: 'mock-user-id-' + Math.random().toString(36).substring(7),
-            email: email,
-            displayName: credential.username || email,
-            role: assignedRole
-        };
-        setUser(newUser);
-        return newUser;
     };
 
-    const register = (username, email, password, role = 'Citizen') => {
-        // Create new user
-        const newUser = {
-            uid: 'mock-user-id-' + Math.random().toString(36).substring(7),
-            email: email,
-            displayName: username,
-            role: role
-        };
-        setUser(newUser);
-
-        // Save new user credentials
-        const credentialExists = credentials.some(cred => cred.email === email);
-        if (!credentialExists) {
-            setCredentials(prev => [...prev, {
+    // 📝 REGISTER (Backend API)
+    const register = async (username, email, password, role = "Citizen") => {
+        try {
+            const res = await registerUser({
+                name: username,
                 email,
                 password,
-                username,
-                role,
-                createdAt: new Date().toISOString()
-            }]);
+                role
+            });
+
+            // Do NOT log the user in yet, they need to verify OTP.
+            return res.data;
+
+        } catch (err) {
+            console.error("DEBUG REGISTRATION ERROR:", err, err.response?.data);
+            let detailedError = err.message || "Unknown error";
+            if (err.response?.data) {
+                if (typeof err.response.data === 'string') {
+                    detailedError = err.response.data;
+                } else if (err.response.data.message) {
+                    detailedError = err.response.data.message;
+                } else if (err.response.data.error) {
+                    detailedError = err.response.data.error;
+                }
+            }
+            
+            const errStr = detailedError.toString().toLowerCase();
+            const isDuplicate = err.response?.status === 409 || errStr.includes('duplicate') || errStr.includes('already exists') || errStr.includes('constraint');
+            
+            if (isDuplicate) {
+                throw new Error("The username or email is already taken. Please use another.");
+            }
+            
+            throw new Error(`Registration failed: ${detailedError}`);
         }
     };
 
+    // 📩 VERIFY OTP
+    const verifyOtp = async (email, otp) => {
+        try {
+            const res = await verifyOtpAPI(email, otp);
+            return res.data;
+        } catch (err) {
+            console.error("DEBUG OTP ERROR:", err);
+            let detailedError = err.message || "OTP Verification failed";
+            if (err.response?.data) {
+                if (typeof err.response.data === 'string') {
+                    detailedError = err.response.data;
+                } else if (err.response.data.message) {
+                    detailedError = err.response.data.message;
+                }
+            }
+            throw new Error(`Verification failed: ${detailedError}`);
+        }
+    };
+
+    // 🚪 LOGOUT
     const logout = () => {
         setUser(null);
     };
 
-    const getCredentials = () => {
-        return credentials;
-    };
-
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout, getCredentials }}>
+        <AuthContext.Provider value={{ user, loading, login, register, verifyOtp, logout, setUser }}>
             {children}
         </AuthContext.Provider>
     );
